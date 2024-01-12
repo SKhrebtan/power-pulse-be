@@ -31,12 +31,6 @@ const exerciseSchema = new Schema(
             type: Number,
             required: true,
         },
-
-        // owner: {
-        //     type: Schema.Types.ObjectId,
-        //     ref: 'user',
-        //     required: true,
-        // },
     },
     { versionKey: false, timestamps: true }
 );
@@ -46,9 +40,3 @@ exerciseSchema.post('save', handleMongooseError);
 const Exercise = model('exercise', exerciseSchema);
 
 module.exports = { Exercise };
-
-//   "name": "assisted chest dip (kneeling)",
-//   "target": "pectorals",
-//   "burnedCalories": 329,
-//   "time": 3
-// }
