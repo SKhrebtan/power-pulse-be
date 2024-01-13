@@ -60,6 +60,14 @@ const userSchema = new Schema(
 
             default: null,
         },
+        dailySportTime: {
+            type: Number,
+            default: 110,
+        },
+        dailyCalories: {
+            type: Number,
+            default: 0,
+        },
     },
     { versionKey: false, timestamps: true }
 );
