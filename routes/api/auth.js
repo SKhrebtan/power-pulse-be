@@ -15,4 +15,10 @@ router.post('/login', validateBody(loginSchema), authCtrl.login);
 router.get('/current', authenticate, authCtrl.current);
 router.post('/logout', authenticate, authCtrl.logout);
 router.patch('/', authenticate, validateBody(updateSchema), authCtrl.update);
+router.get(
+    '/calculates',
+    authenticate,
+    validateBody(updateSchema),
+    authCtrl.calculates
+);
 module.exports = router;
