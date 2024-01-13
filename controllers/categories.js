@@ -2,7 +2,7 @@ const { Category } = require('../models/category');
 const { ctrlWrapper } = require('../helpers');
 
 const getAllCategories = async (req, res) => {
-    const result = await Category.find();
+    const result = await Category.find({}, '-_id');
     res.json(result);
 };
 
