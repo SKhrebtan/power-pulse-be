@@ -2,18 +2,13 @@ const { Product } = require('../models/product');
 const { ctrlWrapper, HttpError } = require('../helpers');
 
 const getAllProducts = async (req, res) => {
-    const {
-        category = null,
-        q = null,
-        bloodType = null,
-        rec = null,
-    } = req.query;
+    const { cat = null, q = null, bloodType = null, rec = null } = req.query;
 
     const groupBlood = `groupBloodNotAllowed.${bloodType}`;
 
-    if (category && q && rec) {
+    if (cat && q && rec) {
         const result = await Product.find({
-            category,
+            category: cat,
             title: { $regex: q, $options: 'i' },
             [groupBlood]: rec,
         });
@@ -28,9 +23,9 @@ const getAllProducts = async (req, res) => {
         return;
     }
 
-    if (category && q) {
+    if (cat && q) {
         const result = await Product.find({
-            category,
+            category: cat,
             title: { $regex: q, $options: 'i' },
         });
 
@@ -44,9 +39,9 @@ const getAllProducts = async (req, res) => {
         return;
     }
 
-    if (category && rec) {
+    if (cat && rec) {
         const result = await Product.find({
-            category,
+            category: cat,
             [groupBlood]: rec,
         });
 
@@ -76,8 +71,8 @@ const getAllProducts = async (req, res) => {
         return;
     }
 
-    if (category) {
-        const result = await Product.find({ category });
+    if (cat) {
+        const result = await Product.find({ category: cat });
         res.json(result);
         return;
     }
