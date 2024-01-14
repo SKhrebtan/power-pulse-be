@@ -44,7 +44,6 @@
                 "summary": "User registration",
 
                 "parameters": [],
-                "security": [{ "Bearer": [] }],
 
                 "requestBody": {
                     "description": "Registration's object",
@@ -84,7 +83,6 @@
                 "tags": ["Auth"],
                 "summary": "User login",
                 "parameters": [],
-                "security": [{ "Bearer": [] }],
                 "requestBody": {
                     "description": "Registration's object",
                     "required": true,
@@ -114,6 +112,36 @@
                     "409": {
                         "description": "Provided email already exists",
                         "content": {}
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "tags": ["Categories"],
+                "summary": "Get all categories of product",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CategoriesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Bad request (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -168,6 +196,23 @@
                         "message": "User was created successfully",
                         "name": "Alex",
                         "email": "alex@mail.com"
+                    }
+                }
+            },
+            "CategoriesResponse": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "example": ["alcoholic drinks", "berries", "cereals"]
+            },
+            "UnauthorizedResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message invalid Bearer token",
+                        "example": "Not authorized"
                     }
                 }
             }
