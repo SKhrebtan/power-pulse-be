@@ -24,7 +24,7 @@ app.use('/api/v1/exercises', exercisesRouter);
 app.use('/api/v1/filters', filtersRouter);
 app.use('/api/v1/products', productsRouter);
 app.use('/api/v1/categories', categoriesRouter);
-// app.use('/api/v1/diary-records', diaryRecordsRouter);
+app.use('/api/v1/diary-records', diaryRecordsRouter);
 
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found!' });

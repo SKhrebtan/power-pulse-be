@@ -78,10 +78,26 @@ const diaryRecordSchema = new Schema(
 
 diaryRecordSchema.post('save', handleMongooseError);
 
-const addDiaryProductSchema = Joi.object({
-
+const checkDateSchema = Joi.object({
+    date: Joi.string().pattern(datePattern).required(),
 });
+
+const addDiaryProductSchema = Joi.object({
+    date: Joi.string().pattern(datePattern).required(),
+    amount: Joi.number().min(1).required(),
+    calories: Joi.number().min(1).required(),
+});
+
+
+
+const schemas = {
+    addDiaryProductSchema,
+    checkDateSchema,
+};
 
 const DiaryRecord = model('diaryRecord', diaryRecordSchema);
 
-module.exports = { DiaryRecord };
+module.exports = {
+    DiaryRecord,
+    schemas,
+};
