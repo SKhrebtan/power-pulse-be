@@ -2,6 +2,7 @@ const { DiaryRecord } = require('../models/diaryRecord');
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
+// for current record need to add logic to check if product is recomended or not
 const getCurrentDiaryRecord = async (req, res) => { 
     const { _id: user } = req.user;
     const { date } = req.body;
@@ -17,6 +18,9 @@ const getCurrentDiaryRecord = async (req, res) => {
     res.json(currentRecord);
 };
 
+// added product to the diary
+
+// later should add functionality to add up same product information in 1 entry
 const addDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
     const product = req.params.productId;
