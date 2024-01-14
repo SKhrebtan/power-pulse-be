@@ -1,9 +1,7 @@
-const express = require('express');
+const router = require('express').Router();
 
 const ctrl = require('../../controllers/exercises');
 const { isValidId, authenticate } = require('../../middlewares');
-
-const router = express.Router();
 
 router.get('/', ctrl.getAllExercises);
 router.get('/:exerciseId', isValidId, ctrl.getExerciseById);

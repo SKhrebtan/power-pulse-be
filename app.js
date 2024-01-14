@@ -3,6 +3,7 @@ const logger = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
 
+const swaggerRouter = require('./routes/api/swagger');
 const authRouter = require('./routes/api/auth');
 const exercisesRouter = require('./routes/api/exercises');
 const filtersRouter = require('./routes/api/filters');
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+app.use('/api/v1/api-docs', swaggerRouter);
 app.use('/api/v1/users', authRouter);
 app.use('/api/v1/exercises', exercisesRouter);
 app.use('/api/v1/filters', filtersRouter);
