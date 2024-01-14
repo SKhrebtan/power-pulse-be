@@ -26,6 +26,48 @@ const userSchema = new Schema(
             type: String,
             default: null,
         },
+        height: {
+            type: Number,
+
+            default: null,
+        },
+        currentWeight: {
+            type: Number,
+
+            default: null,
+        },
+        desiredWeight: {
+            type: Number,
+
+            default: null,
+        },
+        birthday: {
+            type: Date,
+            default: null,
+        },
+        blood: {
+            type: Number,
+
+            default: null,
+        },
+        sex: {
+            type: String,
+
+            default: null,
+        },
+        levelActivity: {
+            type: Number,
+
+            default: null,
+        },
+        dailySportTime: {
+            type: Number,
+            default: 110,
+        },
+        dailyCalories: {
+            type: Number,
+            default: 0,
+        },
     },
     { versionKey: false, timestamps: true }
 );
@@ -43,5 +85,31 @@ const loginSchema = Joi.object({
     password: Joi.string().min(6).required(),
 });
 
+const updateSchema = Joi.object({
+    email: Joi.string().email().pattern(emailPattern),
+    name: Joi.string().required(),
+    height: Joi.number().min(150).required(),
+
+    currentWeight: Joi.number().min(35).required(),
+    desiredWeight: Joi.number().min(35).required(),
+    birthday: Joi.date()
+        .max('now')
+        .required()
+        .custom(value => {
+            const now = new Date();
+            const age = now.getFullYear() - new Date(value).getFullYear();
+            if (age < 18) {
+                throw new Error('User must be at least 18 years old.');
+            }
+            return value;
+        }),
+
+    blood: Joi.number().required().valid(1, 2, 3, 4),
+
+    sex: Joi.string().required().valid('male', 'female'),
+
+    levelActivity: Joi.number().required().valid(1, 2, 3, 4, 5),
+});
+
 const User = model('user', userSchema);
-module.exports = { User, registerSchema, loginSchema };
+module.exports = { User, registerSchema, loginSchema, updateSchema };
