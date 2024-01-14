@@ -134,11 +134,304 @@
                         }
                     },
                     "401": {
-                        "description": "Bad request (invalid Bearer token)",
+                        "description": "Unauthorized (invalid Bearer token)",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Get all products",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "type": "integer",
+                        "description": "Page number"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "type": "integer",
+                        "description": "Products per page"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "type": "string",
+                        "description": "Keyword search query"
+                    },
+                    {
+                        "in": "query",
+                        "name": "cat",
+                        "type": "string",
+                        "description": "Product's categories"
+                    },
+                    {
+                        "in": "query",
+                        "name": "rec",
+                        "type": "boolean",
+                        "description": "Depending on the blood type is recommended or not"
+                    },
+                    {
+                        "in": "query",
+                        "name": "bloodType",
+                        "type": "integer",
+                        "description": "Blood type (1|2|3|4)"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{productId}": {
+            "get": {
+                "tags": ["Products"],
+                "summary": "Get product by ID",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "productId",
+                        "required": true,
+                        "type": "string",
+                        "description": "Product's ID"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductsByIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid ID)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found product by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundByIdResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/filters": {
+            "get": {
+                "tags": ["Filters"],
+                "summary": "Get filters",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "filter",
+                        "required": true,
+                        "type": "string",
+                        "description": "Exercises's filter (one of 'Body parts'|'Muscles'|'Equipment')"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FiltersResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid params query)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadParamsFiltersResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/exercises": {
+            "get": {
+                "tags": ["Exercises"],
+                "summary": "Get exercises by filters",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "bodyPart",
+                        "required": true,
+                        "type": "string",
+                        "description": "Filter's 'Body part'"
+                    },
+                    {
+                        "in": "query",
+                        "name": "equipment",
+                        "required": true,
+                        "type": "string",
+                        "description": "Filter's 'Equipment'"
+                    },
+                    {
+                        "in": "query",
+                        "name": "target",
+                        "required": true,
+                        "type": "string",
+                        "description": "Filter's 'Target'"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExercisesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid params query)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadParamsExFiltersResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/exercises/{exerciseId}": {
+            "get": {
+                "tags": ["Exercises"],
+                "summary": "Get exercise by ID",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "exerciseId",
+                        "required": true,
+                        "type": "string",
+                        "description": "Exercise's ID"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExercisesByIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid ID)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found exercise by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundByIdResponse"
                                 }
                             }
                         }
@@ -206,6 +499,353 @@
                 },
                 "example": ["alcoholic drinks", "berries", "cereals"]
             },
+            "ProductsResponse": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "pages": {
+                                "type": "integer",
+                                "description": "Total pages",
+                                "example": 1
+                            },
+                            "limit": {
+                                "type": "integer",
+                                "description": "Products per page",
+                                "example": 50
+                            },
+                            "products": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "groupBloodNotAllowed": {
+                                            "type": "object",
+                                            "properties": {
+                                                "1": {
+                                                    "type": "boolean",
+                                                    "description": "Recommended or not",
+                                                    "example": true
+                                                },
+                                                "2": {
+                                                    "type": "boolean",
+                                                    "description": "Recommended or not",
+                                                    "example": true
+                                                },
+                                                "3": {
+                                                    "type": "boolean",
+                                                    "description": "Recommended or not",
+                                                    "example": false
+                                                },
+                                                "4": {
+                                                    "type": "boolean",
+                                                    "description": "Recommended or not",
+                                                    "example": false
+                                                }
+                                            }
+                                        },
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Product's ID",
+                                            "example": "5d51694902b2373622ff5773"
+                                        },
+                                        "weight": {
+                                            "type": "integer",
+                                            "description": "Weight of product in grams",
+                                            "example": 100
+                                        },
+                                        "calories": {
+                                            "type": "integer",
+                                            "description": "Quantity calories in product",
+                                            "example": 340
+                                        },
+                                        "category": {
+                                            "type": "string",
+                                            "description": "Product's category",
+                                            "example": "dairy"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Product's name",
+                                            "example": "Danbo cheese"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "data": {
+                        "pages": 7,
+                        "limit": 50,
+                        "products": [
+                            {
+                                "groupBloodNotAllowed": {
+                                    "1": true,
+                                    "2": true,
+                                    "3": true,
+                                    "4": true
+                                },
+                                "_id": "5d51694902b2373622ff58a8",
+                                "weight": 100,
+                                "calories": 289,
+                                "category": "flour",
+                                "title": "Bread Hercules grain"
+                            },
+                            {
+                                "groupBloodNotAllowed": {
+                                    "1": true,
+                                    "2": true,
+                                    "3": true,
+                                    "4": true
+                                },
+                                "_id": "5d51694902b2373622ff5896",
+                                "weight": 100,
+                                "calories": 286,
+                                "category": "flour",
+                                "title": "Tortilla (Mexican Tortillas)"
+                            }
+                        ]
+                    }
+                }
+            },
+            "ProductsByIdResponse": {
+                "type": "object",
+                "properties": {
+                    "groupBloodNotAllowed": {
+                        "type": "object",
+                        "properties": {
+                            "1": {
+                                "type": "boolean",
+                                "description": "Recommended or not",
+                                "example": true
+                            },
+                            "2": {
+                                "type": "boolean",
+                                "description": "Recommended or not",
+                                "example": true
+                            },
+                            "3": {
+                                "type": "boolean",
+                                "description": "Recommended or not",
+                                "example": false
+                            },
+                            "4": {
+                                "type": "boolean",
+                                "description": "Recommended or not",
+                                "example": false
+                            }
+                        }
+                    },
+                    "_id": {
+                        "type": "string",
+                        "description": "Product's ID",
+                        "example": "5d51694902b2373622ff5773"
+                    },
+                    "weight": {
+                        "type": "integer",
+                        "description": "Weight of product in grams",
+                        "example": 100
+                    },
+                    "calories": {
+                        "type": "integer",
+                        "description": "Quantity calories in product",
+                        "example": 340
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Product's category",
+                        "example": "dairy"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Product's name",
+                        "example": "Danbo cheese"
+                    }
+                },
+                "example": {
+                    "groupBloodNotAllowed": {
+                        "1": true,
+                        "2": true,
+                        "3": false,
+                        "4": false
+                    },
+                    "_id": "5d51694902b2373622ff5773",
+                    "weight": 100,
+                    "calories": 340,
+                    "category": "dairy",
+                    "title": "Danbo cheese"
+                }
+            },
+            "FiltersResponse": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "_id": {
+                            "type": "string",
+                            "description": "Filters's ID",
+                            "example": "650f35ece3f5522fc6396289"
+                        },
+                        "filter": {
+                            "type": "string",
+                            "description": "Filter",
+                            "example": "Body parts"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "Name",
+                            "example": "back"
+                        },
+                        "imgURL": {
+                            "type": "string",
+                            "description": "URL image",
+                            "example": "https://ftp.goit.study/img/power-pulse/filters/back_wzzphw.jpg"
+                        }
+                    }
+                },
+                "example": [
+                    {
+                        "_id": "650f35ece3f5522fc6396289",
+                        "filter": "Body parts",
+                        "name": "back",
+                        "imgURL": "https://ftp.goit.study/img/power-pulse/filters/back_wzzphw.jpg"
+                    },
+                    {
+                        "_id": "650f35ece3f5522fc639628a",
+                        "filter": "Body parts",
+                        "name": "cardio",
+                        "imgURL": "https://ftp.goit.study/img/power-pulse/filters/cardio_pkkceg.jpg"
+                    }
+                ]
+            },
+            "ExercisesResponse": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "_id": {
+                            "type": "string",
+                            "description": "Exercise's ID",
+                            "example": "64f2458d6f67bc34bae4f813"
+                        },
+                        "bodyPart": {
+                            "type": "string",
+                            "description": "Body part",
+                            "example": "upper arms"
+                        },
+                        "equipment": {
+                            "type": "string",
+                            "description": "Equipment",
+                            "example": "barbell"
+                        },
+                        "gifUrl": {
+                            "type": "string",
+                            "description": "URL GIF exercise",
+                            "example": "https://ftp.goit.study/img/power-pulse/gifs/0038.gif"
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "Exercise's name",
+                            "example": "barbell drag curl"
+                        },
+                        "target": {
+                            "type": "string",
+                            "description": "Muscles's target ",
+                            "example": "biceps"
+                        },
+                        "burnedCalories": {
+                            "type": "integer",
+                            "description": "Burned calories",
+                            "example": 84
+                        },
+                        "time": {
+                            "type": "integer",
+                            "description": "Time",
+                            "example": 3
+                        }
+                    }
+                },
+                "example": [
+                    {
+                        "_id": "64f2458d6f67bc34bae4f7f7",
+                        "bodyPart": "chest",
+                        "equipment": "leverage machine",
+                        "gifUrl": "https://ftp.goit.study/img/power-pulse/gifs/0009.gif",
+                        "name": "assisted chest dip (kneeling)",
+                        "target": "pectorals",
+                        "burnedCalories": 329,
+                        "time": 3
+                    },
+                    {
+                        "_id": "64f2458d6f67bc34bae4f801",
+                        "bodyPart": "upper arms",
+                        "equipment": "leverage machine",
+                        "gifUrl": "https://ftp.goit.study/img/power-pulse/gifs/0019.gif",
+                        "name": "assisted triceps dip (kneeling)",
+                        "target": "triceps",
+                        "burnedCalories": 233,
+                        "time": 3
+                    }
+                ]
+            },
+            "ExercisesByIdResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Exercise's ID",
+                        "example": "64f2458d6f67bc34bae4f813"
+                    },
+                    "bodyPart": {
+                        "type": "string",
+                        "description": "Body part",
+                        "example": "upper arms"
+                    },
+                    "equipment": {
+                        "type": "string",
+                        "description": "Equipment",
+                        "example": "barbell"
+                    },
+                    "gifUrl": {
+                        "type": "string",
+                        "description": "URL GIF exercise",
+                        "example": "https://ftp.goit.study/img/power-pulse/gifs/0038.gif"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Exercise's name",
+                        "example": "barbell drag curl"
+                    },
+                    "target": {
+                        "type": "string",
+                        "description": "Muscles's target ",
+                        "example": "biceps"
+                    },
+                    "burnedCalories": {
+                        "type": "integer",
+                        "description": "Burned calories",
+                        "example": 84
+                    },
+                    "time": {
+                        "type": "integer",
+                        "description": "Time",
+                        "example": 3
+                    }
+                },
+                "example": {
+                    "_id": "64f2458d6f67bc34bae4f813",
+                    "bodyPart": "upper arms",
+                    "equipment": "barbell",
+                    "gifUrl": "https://ftp.goit.study/img/power-pulse/gifs/0038.gif",
+                    "name": "barbell drag curl",
+                    "target": "biceps",
+                    "burnedCalories": 84,
+                    "time": 3
+                }
+            },
             "UnauthorizedResponse": {
                 "type": "object",
                 "properties": {
@@ -213,6 +853,46 @@
                         "type": "string",
                         "description": "Message invalid Bearer token",
                         "example": "Not authorized"
+                    }
+                }
+            },
+            "InvalidIdResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message invalid ID",
+                        "example": "5d51694902b2373622ff577 is not valid ID!"
+                    }
+                }
+            },
+            "NotFoundByIdResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message not found by ID",
+                        "example": "Product by ID: \"5d51694902b2373622ff7771\" not found"
+                    }
+                }
+            },
+            "BadParamsFiltersResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message bad params filter",
+                        "example": "Please change filter: \"Equipment\" or \"Muscles\""
+                    }
+                }
+            },
+            "BadParamsExFiltersResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message bad params filter",
+                        "example": "Please change filter"
                     }
                 }
             }
