@@ -58,21 +58,21 @@ const diaryRecordSchema = new Schema(
         },
         products: [productRecordSchema],
         exercises: [exerciseRecordSchema],
-        // caloriesConsumed: {
-        //     type: Number,
-        //     required: true,
-        //     default: 0,
-        // },
-        // caloriesBurned: {
-        //     type: Number,
-        //     required: true,
-        //     default: 0,
-        // },
-        // activity: {
-        //     type: Number,
-        //     required: true,
-        //     default: 0,
-        // },
+        caloriesConsumed: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        caloriesBurned: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        activity: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
     },
 );
 
