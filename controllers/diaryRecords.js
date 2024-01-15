@@ -6,11 +6,8 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 const getCurrentDiaryRecord = async (req, res) => { 
     const { _id: user } = req.user;
     const { date } = req.body;
-    const currentRecord = await DiaryRecord.findOne({ user, date }).   populate({
-        path: 'products.product',
-        select: 'title category',
-    })
-
+    const currentRecord = await DiaryRecord.findOne({ user, date }).populate('products.product', 'title category');
+    
     if (!currentRecord) {
         throw HttpError(404, "No records for this date");
     }
@@ -21,7 +18,7 @@ const getCurrentDiaryRecord = async (req, res) => {
 // added product to the diary
 
 // later should add functionality to add up same product information in 1 entry
-const addDiaryProduct = async (req, res) => {
+const addDiaryProduct = async (req, res, next) => {
     const { _id: user } = req.user;
     const product = req.params.productId;
     const {
@@ -39,18 +36,21 @@ const addDiaryProduct = async (req, res) => {
                     calories,
                 },
             }
-        })
+        },{new:true}).populate('products.product', 'title category');
     
     if (!currentRecord) {
-       const newRecord = await DiaryRecord.create({
+        let newRecord = await DiaryRecord.create({
             user,
             date,
-            products:[{product, amount, calories}],
-    });
-    res.json(newRecord);
+            products: [{ product, amount, calories }],
+        });
+        newRecord = await newRecord.populate('products.product', 'title category');
+        res.json(newRecord);
+        return;
     };
 
-    res.json(currentRecord);
+
+    res.json(currentRecord)
 };
 
 
