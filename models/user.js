@@ -68,6 +68,11 @@ const userSchema = new Schema(
             type: Number,
             default: 0,
         },
+        avatarURL: {
+            type: String,
+            default:
+                'https://res.cloudinary.com/doiiko7sq/image/upload/v1705323621/default-avatar/default_dmhmqw.jpg',
+        },
     },
     { versionKey: false, timestamps: true }
 );

@@ -73,6 +73,7 @@ const logout = async (req, res) => {
 
 const update = async (req, res, next) => {
     const { _id } = req.user;
+    console.log(_id);
     const { ...data } = req.body;
 
     const updatedUser = {
@@ -109,10 +110,26 @@ const update = async (req, res, next) => {
     res.status(200).json(user);
 };
 
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const avatarURL = req.file.path;
+    console.log(req.file);
+
+    await User.findByIdAndUpdate(
+        _id,
+        { avatarURL },
+        {
+            new: true,
+        }
+    );
+    res.json({ avatarURL: avatarURL });
+};
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     current: ctrlWrapper(current),
     logout: ctrlWrapper(logout),
     update: ctrlWrapper(update),
+    updateAvatar: ctrlWrapper(updateAvatar),
 };
