@@ -90,6 +90,10 @@ const addDiaryProductSchema = Joi.object({
         "string.pattern.base": "Enter valid date in the format dd-mm-YYYY",
         "any.required": "Date is required"
     }),
+    product: Joi.string().required().messages({
+        "any.required": "ProductId is required",
+        "string.base": "ProductId must be string"
+    }),
     amount: Joi.number().integer().min(1).required().messages({
         "any.required": "Amount is required",
         "number.min" : "Please add at least 1 gram"

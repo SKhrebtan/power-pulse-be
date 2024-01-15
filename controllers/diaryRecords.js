@@ -19,9 +19,9 @@ const getCurrentDiaryRecord = async (req, res) => {
 // later should add functionality to add up same product information in 1 entry
 const addDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
-    const product = req.params.productId;
     const {
         date,
+        product,
         amount,
         calories
     } = req.body;
