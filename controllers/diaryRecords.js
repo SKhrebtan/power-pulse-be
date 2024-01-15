@@ -51,7 +51,7 @@ const addDiaryProduct = async (req, res) => {
         });
         newRecord = await newRecord
         .populate('products.product', 'title category groupBloodNotAllowed')
-        .populate('exercises.exercise', 'name bodyPart equipment target');
+        newRecord = await newRecord.populate('exercises.exercise', 'name bodyPart equipment target');
         res.json(newRecord);
         return;
     };
@@ -96,7 +96,7 @@ const addDiaryExercise = async (req, res) => {
         });
         newRecord = await newRecord
         .populate('products.product', 'title category groupBloodNotAllowed')
-        .populate('exercises.exercise', 'name bodyPart equipment target');
+        newRecord = await newRecord.populate('exercises.exercise', 'name bodyPart equipment target');
         res.json(newRecord);
         return;
     };
