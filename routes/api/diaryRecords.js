@@ -1,7 +1,7 @@
 const express = require('express');
 
 const ctrl = require('../../controllers/diaryRecords');
-const { validateBody, isValidId, authenticate } = require('../../middlewares');
+const { validateBody, authenticate } = require('../../middlewares');
 
 const { schemas } = require('../../models/diaryRecord');
 
@@ -15,7 +15,7 @@ router.get('/', authenticate, validateBody(schemas.checkDateSchema), ctrl.getCur
 router.post('/add-exercise', authenticate, validateBody(schemas.addDiaryExerciseSchema), ctrl.addDiaryExercise);
 
 // add product to diary
-router.post('/:productId', isValidId, authenticate, validateBody(schemas.addDiaryProductSchema), ctrl.addDiaryProduct);
+router.post('/add-product', authenticate, validateBody(schemas.addDiaryProductSchema), ctrl.addDiaryProduct);
 
 
 module.exports = router;
