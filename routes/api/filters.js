@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
 const ctrl = require('../../controllers/filters');
-// const { validateBody, isValidId, authenticate } = require('../../middlewares');
+const { authenticate } = require('../../middlewares');
 
-router.get('/', ctrl.getAllFilters);
+router.get('/', authenticate, ctrl.getAllFilters);
 
 module.exports = router;

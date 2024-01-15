@@ -201,38 +201,68 @@
         "/users/{userId}": {
             "patch": {
                 "tags": ["Auth"],
-                "summary": "User login",
-                "parameters": [],
+                "summary": "User update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "required": true,
+                        "type": "string",
+                        "description": "User's ID"
+                    }
+                ],
                 "security": [{ "Bearer": [] }],
                 "requestBody": {
-                    "description": "Registration's object",
+                    "description": "User update object",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/RegistrationRequest"
+                                "$ref": "#/components/schemas/UserUpdateRequest"
                             }
                         }
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/RegistrationResponse"
+                                    "$ref": "#/components/schemas/UserUpdateResponse"
                                 }
                             }
                         }
                     },
                     "400": {
-                        "description": "Bad request (invalid request body)",
-                        "content": {}
+                        "description": "Bad request (invalid ID)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidIdResponse"
+                                }
+                            }
+                        }
                     },
-                    "409": {
-                        "description": "Provided email already exists",
-                        "content": {}
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found user by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundByIdResponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -638,6 +668,11 @@
                     "user": {
                         "type": "object",
                         "properties": {
+                            "avatarURL": {
+                                "type": "string",
+                                "description": "URL user's avatar",
+                                "example": "https://res.cloudinary.com/doiiko7sq/image/upload/v1705323621/default-avatar/default_dmhmqw.jpg"
+                            },
                             "_id": {
                                 "type": "string",
                                 "description": "User's ID",
@@ -677,7 +712,8 @@
                             "birthday": {
                                 "type": "string",
                                 "description": "User's birthday",
-                                "example": "2000-01-01T01:00:00.000Z"
+                                "example": "2000-01-01T01:00:00.000Z",
+                                "format": "date"
                             },
                             "blood": {
                                 "type": "integer",
@@ -702,13 +738,14 @@
                             "dailyCalories": {
                                 "type": "integer",
                                 "description": "User's daily calories",
-                                "example": 3200
+                                "example": 2200
                             }
                         }
                     }
                 },
                 "example": {
                     "user": {
+                        "avatarURL": "https://res.cloudinary.com/doiiko7sq/image/upload/v1705323621/default-avatar/default_dmhmqw.jpg",
                         "_id": "65a52e61cfe9180b44441f21",
                         "name": "Alex",
                         "email": "test@mail.com",
@@ -721,7 +758,7 @@
                         "sex": "male",
                         "levelActivity": 2,
                         "dailySportTime": 110,
-                        "dailyCalories": 3200
+                        "dailyCalories": 2200
                     }
                 }
             },
@@ -731,6 +768,11 @@
                     "user": {
                         "type": "object",
                         "properties": {
+                            "avatarURL": {
+                                "type": "string",
+                                "description": "URL user's avatar",
+                                "example": "https://res.cloudinary.com/doiiko7sq/image/upload/v1705323621/default-avatar/default_dmhmqw.jpg"
+                            },
                             "_id": {
                                 "type": "string",
                                 "description": "User's ID",
@@ -770,7 +812,8 @@
                             "birthday": {
                                 "type": "string",
                                 "description": "User's birthday",
-                                "example": "2000-01-01T01:00:00.000Z"
+                                "example": "2000-01-01T01:00:00.000Z",
+                                "format": "date"
                             },
                             "blood": {
                                 "type": "integer",
@@ -795,13 +838,14 @@
                             "dailyCalories": {
                                 "type": "integer",
                                 "description": "User's daily calories",
-                                "example": 3200
+                                "example": 2200
                             }
                         }
                     }
                 },
                 "example": {
                     "user": {
+                        "avatarURL": "https://res.cloudinary.com/doiiko7sq/image/upload/v1705323621/default-avatar/default_dmhmqw.jpg",
                         "_id": "65a52e61cfe9180b44441f21",
                         "name": "Alex",
                         "email": "test@mail.com",
@@ -814,8 +858,156 @@
                         "sex": "male",
                         "levelActivity": 2,
                         "dailySportTime": 110,
-                        "dailyCalories": 3200
+                        "dailyCalories": 2200
                     }
+                }
+            },
+            "UserUpdateRequest": {
+                "type": "object",
+                "required": [
+                    "height",
+                    "currentWeight",
+                    "desiredWeight",
+                    "birthday",
+                    "blood",
+                    "sex",
+                    "levelActivity"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "User's name",
+                        "example": "Alex"
+                    },
+                    "height": {
+                        "type": "integer",
+                        "description": "User's height (>150)",
+                        "example": 176
+                    },
+                    "currentWeight": {
+                        "type": "integer",
+                        "description": "User's current weight (>35)",
+                        "example": 85
+                    },
+                    "desiredWeight": {
+                        "type": "integer",
+                        "description": "User's desired weight (>35)",
+                        "example": 75
+                    },
+                    "birthday": {
+                        "type": "string",
+                        "description": "User's birthday (since 2006)",
+                        "example": "01.01.2000",
+                        "format": "date"
+                    },
+                    "blood": {
+                        "type": "integer",
+                        "description": "User's blood type (1|2|3|4)",
+                        "example": 75
+                    },
+                    "sex": {
+                        "type": "string",
+                        "description": "User's sex ('male' or 'female')",
+                        "example": "male"
+                    },
+                    "levelActivity": {
+                        "type": "integer",
+                        "description": "User's level activity (1|2|3|4|5)",
+                        "example": 75
+                    }
+                }
+            },
+            "UserUpdateResponse": {
+                "type": "object",
+                "properties": {
+                    "avatarURL": {
+                        "type": "string",
+                        "description": "URL user's avatar",
+                        "example": "https://res.cloudinary.com/doiiko7sq/image/upload/v1705323621/default-avatar/default_dmhmqw.jpg"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "description": "User's ID",
+                        "example": "65a52e61cfe9180b44441f21"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "User's name",
+                        "example": "Alex"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email",
+                        "example": "test@mail.com"
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YTUyZTYxY2ZlOTE4MGI0NDQ0MWYyMSIsImlhdCI6MTcwNTMyNDE2MCwiZXhwIjoxNzA1NDA2OTYwfQ.zPR5gHUKnco4bOqswmvlozLdATEomLDYNnZw3h9Dcr8"
+                    },
+                    "height": {
+                        "type": "integer",
+                        "description": "User's height",
+                        "example": 180
+                    },
+                    "currentWeight": {
+                        "type": "integer",
+                        "description": "User's current weight",
+                        "example": 85
+                    },
+                    "desiredWeight": {
+                        "type": "integer",
+                        "description": "User's current weight",
+                        "example": 75
+                    },
+                    "birthday": {
+                        "type": "string",
+                        "description": "User's birthday",
+                        "example": "2000-01-01T01:00:00.000Z",
+                        "format": "date"
+                    },
+                    "blood": {
+                        "type": "integer",
+                        "description": "User's blood type (1|2|3|4)",
+                        "example": 2
+                    },
+                    "sex": {
+                        "type": "string",
+                        "description": "User's sex",
+                        "example": "male"
+                    },
+                    "levelActivity": {
+                        "type": "integer",
+                        "description": "User's level activity (1|2|3|4|5)",
+                        "example": 2
+                    },
+                    "dailySportTime": {
+                        "type": "integer",
+                        "description": "User's daily sport time (min)",
+                        "example": 110
+                    },
+                    "dailyCalories": {
+                        "type": "integer",
+                        "description": "User's daily calories",
+                        "example": 2200
+                    }
+                },
+                "example": {
+                    "avatarURL": "https://res.cloudinary.com/doiiko7sq/image/upload/v1705323621/default-avatar/default_dmhmqw.jpg",
+                    "_id": "65a52e61cfe9180b44441f21",
+                    "name": "Alex",
+                    "email": "test@mail.com",
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YTUyZTYxY2ZlOTE4MGI0NDQ0MWYyMSIsImlhdCI6MTcwNTMyNDE2MCwiZXhwIjoxNzA1NDA2OTYwfQ.zPR5gHUKnco4bOqswmvlozLdATEomLDYNnZw3h9Dcr8",
+                    "height": 180,
+                    "currentWeight": 85,
+                    "desiredWeight": 75,
+                    "birthday": "2000-01-01T01:00:00.000Z",
+                    "blood": 2,
+                    "sex": "male",
+                    "levelActivity": 2,
+                    "dailySportTime": 110,
+                    "dailyCalories": 2200
                 }
             },
             "LogoutResponse": {
@@ -1208,7 +1400,7 @@
                     "message": {
                         "type": "string",
                         "description": "Message not found by ID",
-                        "example": "Product by ID: \"5d51694902b2373622ff7771\" not found"
+                        "example": "User/Product/Exercise by ID: \"5d51694902b2373622ff7771\" not found"
                     }
                 }
             },

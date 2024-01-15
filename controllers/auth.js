@@ -59,7 +59,7 @@ const login = async (req, res, next) => {
 };
 
 const current = async (req, res, next) => {
-    res.status(200).json({
+    res.json({
         user: req.user,
     });
 };
@@ -68,35 +68,33 @@ const logout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: '' });
 
-    res.status(200).json({ message: 'Logout success' });
+    res.json({ message: 'Logout success' });
 };
 
 const update = async (req, res, next) => {
+    const { userId } = req.params;
     const { _id } = req.user;
-    console.log(_id);
-    const { ...data } = req.body;
 
-    const updatedUser = {
-        ...data,
-    };
+    if (userId !== _id.toString())
+        throw HttpError(403, "You don't have permission to access");
 
-    const user = await User.findByIdAndUpdate(_id, updatedUser, {
-        new: true,
-    });
+    const { ...updatedUserData } = req.body;
+
+    const user = await User.findByIdAndUpdate(userId, updatedUserData);
 
     if (!user) {
-        throw new HttpError(404, 'Not found');
+        throw new HttpError(404, `User by ID: "${userId}" not found`);
     }
 
-    if (
-        !user.height ||
-        !user.currentWeight ||
-        !user.birthday ||
-        !user.sex ||
-        !user.levelActivity
-    ) {
-        throw new HttpError(400, 'Please fill in all information');
-    }
+    // if (
+    //     !user.height ||
+    //     !user.currentWeight ||
+    //     !user.birthday ||
+    //     !user.sex ||
+    //     !user.levelActivity
+    // ) {
+    //     throw new HttpError(400, 'Please fill in all information');
+    // }
 
     user.dailyCalories = BMR(
         user.sex,
@@ -106,8 +104,13 @@ const update = async (req, res, next) => {
         user.levelActivity
     );
 
-    await User.findByIdAndUpdate(_id, { dailyCalories: user.dailyCalories });
-    res.status(200).json(user);
+    const updatedUser = await User.findByIdAndUpdate(
+        _id,
+        { dailyCalories: user.dailyCalories },
+        { new: true, select: '-createdAt -updatedAt -password' }
+    );
+
+    res.json(updatedUser);
 };
 
 const updateAvatar = async (req, res) => {
