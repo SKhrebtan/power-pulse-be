@@ -2,6 +2,7 @@ const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { HttpError, ctrlWrapper } = require('../helpers');
+const BMR = require('../helpers/dailyCalories');
 require('dotenv').config();
 
 const { SECRET_KEY } = process.env;
@@ -42,20 +43,19 @@ const login = async (req, res, next) => {
     };
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+
     await User.findByIdAndUpdate(user._id, { token });
 
     res.status(200).json({
         token: token,
-        user: {
-            name: user.name,
-            email: user.email,
-        },
+        user: user,
     });
 };
 
 const current = async (req, res, next) => {
-    const { email, name } = req.user;
-    res.status(200).json({ user: { name: name, email: email } });
+    res.status(200).json({
+        user: req.user,
+    });
 };
 
 const logout = async (req, res) => {
@@ -65,26 +65,44 @@ const logout = async (req, res) => {
     res.status(200).json({ message: 'Logout success' });
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
     const { _id } = req.user;
-    const { password, ...data } = req.body;
-    let hashPassword;
-    if (password) {
-        hashPassword = await bcrypt.hash(password, 10);
-    }
+    const { ...data } = req.body;
 
     const updatedUser = {
-        ...(password && { password: hashPassword }),
         ...data,
     };
+
     const user = await User.findByIdAndUpdate(_id, updatedUser, {
         new: true,
     });
+
     if (!user) {
-        throw HttpError(404, 'Not found');
+        throw new HttpError(404, 'Not found');
     }
+
+    if (
+        !user.height ||
+        !user.currentWeight ||
+        !user.birthday ||
+        !user.sex ||
+        !user.levelActivity
+    ) {
+        throw new HttpError(400, 'Please fill in all information');
+    }
+
+    user.dailyCalories = BMR(
+        user.sex,
+        user.currentWeight,
+        user.height,
+        user.birthday,
+        user.levelActivity
+    );
+
+    await User.findByIdAndUpdate(_id, { dailyCalories: user.dailyCalories });
     res.status(200).json(user);
 };
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
