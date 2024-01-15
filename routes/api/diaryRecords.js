@@ -11,6 +11,7 @@ const router = express.Router();
 // add product to diary
 router.post('/:productId', isValidId, authenticate, validateBody(schemas.addDiaryProductSchema), ctrl.addDiaryProduct);
 
+// get specific record, by date for authorized user
 router.get('/', authenticate, validateBody(schemas.checkDateSchema), ctrl.getCurrentDiaryRecord);
 
 module.exports = router;

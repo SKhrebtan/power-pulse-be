@@ -2,7 +2,7 @@ const { DiaryRecord } = require('../models/diaryRecord');
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-// for current record need to add logic to check if product is recomended or not
+// get specific record, by date for authorized user
 const getCurrentDiaryRecord = async (req, res) => { 
     const { _id: user } = req.user;
     const { date } = req.body;
@@ -35,7 +35,10 @@ const addDiaryProduct = async (req, res, next) => {
                     amount,
                     calories,
                 },
-            }
+            },
+            $inc: {
+                caloriesConsumed: +calories,
+            },
         },{new:true}).populate('products.product', 'title category groupBloodNotAllowed');
     
     if (!currentRecord) {
@@ -43,13 +46,12 @@ const addDiaryProduct = async (req, res, next) => {
             user,
             date,
             products: [{ product, amount, calories }],
+            caloriesConsumed: calories,
         });
         newRecord = await newRecord.populate('products.product', 'title category groupBloodNotAllowed');
-        res.json(newRecord);
+        res.json(newRecord,{'test':'hello'});
         return;
     };
-
-
     res.json(currentRecord)
 };
 
