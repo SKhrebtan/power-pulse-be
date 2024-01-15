@@ -91,10 +91,8 @@ const loginSchema = Joi.object({
 });
 
 const updateSchema = Joi.object({
-    email: Joi.string().email().pattern(emailPattern),
-    name: Joi.string().required(),
+    name: Joi.string(),
     height: Joi.number().min(150).required(),
-
     currentWeight: Joi.number().min(35).required(),
     desiredWeight: Joi.number().min(35).required(),
     birthday: Joi.date()
@@ -108,11 +106,8 @@ const updateSchema = Joi.object({
             }
             return value;
         }),
-
     blood: Joi.number().required().valid(1, 2, 3, 4),
-
     sex: Joi.string().required().valid('male', 'female'),
-
     levelActivity: Joi.number().required().valid(1, 2, 3, 4, 5),
 });
 
