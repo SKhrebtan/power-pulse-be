@@ -36,7 +36,7 @@ const addDiaryProduct = async (req, res, next) => {
                     calories,
                 },
             }
-        },{new:true}).populate('products.product', 'title category');
+        },{new:true}).populate('products.product', 'title category groupBloodNotAllowed');
     
     if (!currentRecord) {
         let newRecord = await DiaryRecord.create({
@@ -44,7 +44,7 @@ const addDiaryProduct = async (req, res, next) => {
             date,
             products: [{ product, amount, calories }],
         });
-        newRecord = await newRecord.populate('products.product', 'title category');
+        newRecord = await newRecord.populate('products.product', 'title category groupBloodNotAllowed');
         res.json(newRecord);
         return;
     };
