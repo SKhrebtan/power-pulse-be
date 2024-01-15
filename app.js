@@ -9,6 +9,7 @@ const exercisesRouter = require('./routes/api/exercises');
 const filtersRouter = require('./routes/api/filters');
 const productsRouter = require('./routes/api/products');
 const categoriesRouter = require('./routes/api/categories');
+const diaryRecordsRouter = require('./routes/api/diaryRecords');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/v1/exercises', exercisesRouter);
 app.use('/api/v1/filters', filtersRouter);
 app.use('/api/v1/products', productsRouter);
 app.use('/api/v1/categories', categoriesRouter);
+app.use('/api/v1/diary-records', diaryRecordsRouter);
 
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found!' });
