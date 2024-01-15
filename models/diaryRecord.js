@@ -84,14 +84,22 @@ const checkDateSchema = Joi.object({
 
 const addDiaryProductSchema = Joi.object({
     date: Joi.string().pattern(datePattern).required(),
-    amount: Joi.number().min(1).required(),
-    calories: Joi.number().min(1).required(),
+    amount: Joi.number().integer().min(1).required(),
+    calories: Joi.number().integer().min(1).required(),
+});
+
+const addDiaryExerciseSchema = Joi.object({
+    date: Joi.string().pattern(datePattern).required(),
+    exercise: Joi.string().required(),
+    time: Joi.number().integer().min(1).required(),
+    calories: Joi.number().integer().min(1).required(),
 });
 
 
 
 const schemas = {
     addDiaryProductSchema,
+    addDiaryExerciseSchema,
     checkDateSchema,
 };
 
