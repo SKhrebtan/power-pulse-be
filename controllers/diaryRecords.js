@@ -5,7 +5,7 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 // get specific record, by date for authorized user
 const getCurrentDiaryRecord = async (req, res) => { 
     const { _id: user } = req.user;
-    const { date } = req.body;
+    const { date } = req.params;
     const currentRecord = await DiaryRecord.findOne({ user, date }).populate('products.product', 'title category');
     
     if (!currentRecord) {
