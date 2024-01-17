@@ -1,15 +1,18 @@
 const { DiaryRecord } = require('../models/diaryRecord');
 
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper } = require('../helpers');
 
 // get specific record, by date for authorized user
-const getCurrentDiaryRecord = async (req, res) => { 
+const getCurrentDiaryRecord = async (req, res) => {
     const { _id: user } = req.user;
     const { date } = req.params;
-    const currentRecord = await DiaryRecord.findOne({ user, date }).populate('products.product', 'title category');
-    
+    const currentRecord = await DiaryRecord.findOne({ user, date }).populate(
+        'products.product',
+        'title category'
+    );
+
     if (!currentRecord) {
-        throw HttpError(404, "No records for this date");
+        throw HttpError(404, 'No records for this date');
     }
 
     res.json(currentRecord);
@@ -19,14 +22,10 @@ const getCurrentDiaryRecord = async (req, res) => {
 // later should add functionality to add up same product information in 1 entry
 const addDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
-    const {
-        date,
-        product,
-        amount,
-        calories
-    } = req.body;
+    const { date, product, amount, calories } = req.body;
 
-    const currentRecord = await DiaryRecord.findOneAndUpdate({ user, date },
+    const currentRecord = await DiaryRecord.findOneAndUpdate(
+        { user, date },
         {
             $push: {
                 products: {
@@ -38,10 +37,12 @@ const addDiaryProduct = async (req, res) => {
             $inc: {
                 caloriesConsumed: +calories,
             },
-        }, { new: true })
+        },
+        { new: true }
+    )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
-    
+
     if (!currentRecord) {
         let newRecord = await DiaryRecord.create({
             user,
@@ -49,27 +50,28 @@ const addDiaryProduct = async (req, res) => {
             products: [{ product, amount, calories }],
             caloriesConsumed: calories,
         });
-        newRecord = await newRecord
-        .populate('products.product', 'title category groupBloodNotAllowed')
-        newRecord = await newRecord.populate('exercises.exercise', 'name bodyPart equipment target');
+        newRecord = await newRecord.populate(
+            'products.product',
+            'title category groupBloodNotAllowed'
+        );
+        newRecord = await newRecord.populate(
+            'exercises.exercise',
+            'name bodyPart equipment target'
+        );
         res.json(newRecord);
         return;
-    };
-    res.json(currentRecord)
+    }
+    res.json(currentRecord);
 };
 
 // add exercise to diary
 // later should add functionality to add up same product information in 1 entry sum up time, or add repetition field and update it
 const addDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
-    const {
-        date,
-        exercise,
-        time,
-        calories
-    } = req.body;
+    const { date, exercise, time, calories } = req.body;
 
-    const currentRecord = await DiaryRecord.findOneAndUpdate({ user, date },
+    const currentRecord = await DiaryRecord.findOneAndUpdate(
+        { user, date },
         {
             $push: {
                 exercises: {
@@ -80,33 +82,68 @@ const addDiaryExercise = async (req, res) => {
             },
             $inc: {
                 caloriesBurned: +calories,
-                activity: + time,
+                activity: +time,
             },
-        }, { new: true })
+        },
+        { new: true }
+    )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
-    
+
     if (!currentRecord) {
         let newRecord = await DiaryRecord.create({
             user,
             date,
             exercises: [{ exercise, time, calories }],
             caloriesBurned: calories,
-            activity:time,
+            activity: time,
         });
-        newRecord = await newRecord
-        .populate('products.product', 'title category groupBloodNotAllowed')
-        newRecord = await newRecord.populate('exercises.exercise', 'name bodyPart equipment target');
+        newRecord = await newRecord.populate(
+            'products.product',
+            'title category groupBloodNotAllowed'
+        );
+        newRecord = await newRecord.populate(
+            'exercises.exercise',
+            'name bodyPart equipment target'
+        );
         res.json(newRecord);
         return;
-    };
-    res.json(currentRecord)
+    }
+    res.json(currentRecord);
 };
 
+const removeDiaryProduct = async (req, res) => {
+    const { _id: user } = req.user;
+    const { date } = req.params;
+    const { product, calories } = req.body;
 
+    const currentRecord = await DiaryRecord.findOneAndUpdate(
+        { user, date },
+        {
+            $inc: {
+                caloriesConsumed: -calories,
+            },
+            $pull: {
+                products: {
+                    product: product,
+                },
+            },
+        },
+        { new: true }
+    )
+        .populate('products.product', 'title category groupBloodNotAllowed')
+        .populate('exercises.exercise', 'name bodyPart equipment target');
+
+    if (!currentRecord) {
+        throw HttpError(404, 'No records for this date');
+    }
+
+    res.json(currentRecord);
+};
 
 module.exports = {
     getCurrentDiaryRecord: ctrlWrapper(getCurrentDiaryRecord),
     addDiaryProduct: ctrlWrapper(addDiaryProduct),
     addDiaryExercise: ctrlWrapper(addDiaryExercise),
-}
+    removeDiaryProduct: ctrlWrapper(removeDiaryProduct),
+};
