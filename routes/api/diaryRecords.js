@@ -1,7 +1,12 @@
 const router = require('express').Router();
 
 const ctrl = require('../../controllers/diaryRecords');
-const { validateBody, authenticate, validateParams } = require('../../middlewares');
+
+const {
+    validateBody,
+    authenticate,
+    validateParams,
+} = require('../../middlewares');
 
 const { schemas } = require('../../models/diaryRecord');
 
@@ -27,6 +32,14 @@ router.post(
     authenticate,
     validateBody(schemas.addDiaryProductSchema),
     ctrl.addDiaryProduct
+);
+
+router.patch(
+    '/:date/remove-product',
+    authenticate,
+    validateParams(schemas.checkDateSchema),
+    validateBody(schemas.removeDiaryProductSchema),
+    ctrl.removeDiaryProduct
 );
 
 module.exports = router;
