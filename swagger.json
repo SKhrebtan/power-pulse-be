@@ -1,7 +1,7 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "version": "1.0.2",
+        "version": "1.0.3",
         "title": "Power Pulse API Documentation",
         "description": "REST API documentation for project 'Power Pulse'",
         "license": {
@@ -761,7 +761,7 @@
                         }
                     },
                     "404": {
-                        "description": "Not found user by ID",
+                        "description": "Not found product by ID",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -820,11 +820,21 @@
                         }
                     },
                     "400": {
-                        "description": "Bad request (invalid request body)",
+                        "description": "Bad request (invalid ID)",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BadReqBodyUpdateAvatarResponse"
+                                    "$ref": "#/components/schemas/InvalidIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found exercise by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundByIdResponse"
                                 }
                             }
                         }
