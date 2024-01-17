@@ -1,15 +1,15 @@
 const router = require('express').Router();
 
 const ctrl = require('../../controllers/diaryRecords');
-const { validateBody, authenticate } = require('../../middlewares');
+const { validateBody, authenticate, validateParams } = require('../../middlewares');
 
 const { schemas } = require('../../models/diaryRecord');
 
 // get specific record, by date for authorized user
 router.get(
-    '/',
+    '/:date',
     authenticate,
-    validateBody(schemas.checkDateSchema),
+    validateParams(schemas.checkDateSchema),
     ctrl.getCurrentDiaryRecord
 );
 
