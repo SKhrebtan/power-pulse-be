@@ -1,11 +1,14 @@
 const router = require('express').Router();
+
 const authCtrl = require('../../controllers/auth');
 const {
     authenticate,
     isValidId,
     validateBody,
     upload,
+    validateFormats,
 } = require('../../middlewares');
+
 const {
     registerSchema,
     loginSchema,
@@ -28,7 +31,7 @@ router.patch(
 router.put(
     '/upload',
     authenticate,
-    upload.single('image'),
+    validateFormats(upload.single('image')),
     authCtrl.updateAvatar
 );
 module.exports = router;

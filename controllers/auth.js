@@ -118,6 +118,7 @@ const updateAvatar = async (req, res, next) => {
     const avatarURL = req.file.path;
     console.log(req.file);
 
+
     await User.findByIdAndUpdate(
         _id,
         { avatarURL },
