@@ -141,9 +141,40 @@ const removeDiaryProduct = async (req, res) => {
     res.json(currentRecord);
 };
 
+const removeDiaryExercise = async (req, res) => {
+    const { _id: user } = req.user;
+    const { date } = req.params;
+    const { exercise, time, calories } = req.body;
+
+    const currentRecord = await DiaryRecord.findOneAndUpdate(
+        { user, date },
+        {
+            $inc: {
+                caloriesBurned: -calories,
+                activity: -time,
+            },
+            $pull: {
+                exercises: {
+                    exercise,
+                },
+            },
+        },
+        { new: true }
+    )
+        .populate('products.product', 'title category groupBloodNotAllowed')
+        .populate('exercises.exercise', 'name bodyPart equipment target');
+
+    if (!currentRecord) {
+        throw HttpError(404, 'No records for this date');
+    }
+
+    res.json(currentRecord);
+};
+
 module.exports = {
     getCurrentDiaryRecord: ctrlWrapper(getCurrentDiaryRecord),
     addDiaryProduct: ctrlWrapper(addDiaryProduct),
     addDiaryExercise: ctrlWrapper(addDiaryExercise),
     removeDiaryProduct: ctrlWrapper(removeDiaryProduct),
+    removeDiaryExercise: ctrlWrapper(removeDiaryExercise),
 };

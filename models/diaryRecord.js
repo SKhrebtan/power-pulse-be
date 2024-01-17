@@ -130,7 +130,7 @@ const removeDiaryProductSchema = Joi.object({
 });
 
 const removeDiaryExerciseSchema = Joi.object({
-    product: Joi.string().required().messages({
+    exercise: Joi.string().required().messages({
         'any.required': 'ExerciseId is required',
         'string.base': 'ExerciseId must be string',
     }),
