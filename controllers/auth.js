@@ -113,10 +113,11 @@ const update = async (req, res, next) => {
     res.json(updatedUser);
 };
 
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
     const { _id } = req.user;
     const avatarURL = req.file.path;
     console.log(req.file);
+
 
     await User.findByIdAndUpdate(
         _id,
