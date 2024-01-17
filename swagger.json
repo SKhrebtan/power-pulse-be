@@ -267,6 +267,57 @@
                 }
             }
         },
+        "/users/upload": {
+            "put": {
+                "tags": ["Auth"],
+                "summary": "User update avatar",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "description": "Update avatar object (form-data:file)",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateAvatarRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateAvatarResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadReqBodyUpdateAvatarResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/categories": {
             "get": {
                 "tags": ["Categories"],
@@ -335,6 +386,7 @@
                     {
                         "in": "query",
                         "name": "bloodType",
+                        "required": true,
                         "type": "integer",
                         "description": "Blood type (1|2|3|4)"
                     }
@@ -1020,6 +1072,27 @@
                     }
                 }
             },
+            "UpdateAvatarResponse": {
+                "type": "object",
+                "properties": {
+                    "avatarURL": {
+                        "type": "string",
+                        "description": "URL new avatar",
+                        "example": "https://res.cloudinary.com/doiiko7sq/image/upload/v1705510039/Avatars/dgzpd9mwxv5gzzz9bzll.jpg"
+                    }
+                }
+            },
+            "UpdateAvatarRequest": {
+                "type": "object",
+                "required": ["image"],
+                "properties": {
+                    "image": {
+                        "type": "string",
+                        "format": "binary",
+                        "description": "Avatar's image (.jpg | .jpeg | .png)"
+                    }
+                }
+            },
             "CategoriesResponse": {
                 "type": "array",
                 "items": {
@@ -1451,6 +1524,16 @@
                         "type": "string",
                         "description": "Message used email",
                         "example": "Email in use"
+                    }
+                }
+            },
+            "BadReqBodyUpdateAvatarResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message bad request body",
+                        "example": "Invalid image file"
                     }
                 }
             }
