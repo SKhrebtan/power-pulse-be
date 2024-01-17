@@ -42,4 +42,12 @@ router.patch(
     ctrl.removeDiaryProduct
 );
 
+router.patch(
+    '/:date/remove-exercise',
+    authenticate,
+    validateParams(schemas.checkDateSchema),
+    validateBody(schemas.removeDiaryExerciseSchema),
+    ctrl.removeDiaryExercise
+);
+
 module.exports = router;
