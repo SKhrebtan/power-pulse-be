@@ -112,4 +112,9 @@ const updateSchema = Joi.object({
 });
 
 const User = model('user', userSchema);
-module.exports = { User, registerSchema, loginSchema, updateSchema };
+module.exports = {
+    User,
+    registerSchema,
+    loginSchema,
+    updateSchema,
+};

@@ -16,7 +16,12 @@ const storage = new CloudinaryStorage({
     cloudinary,
     params: {
         folder: 'Avatars',
-        allowedFormats: ['jpeg', 'png', 'jpg'],
+        allowed_formats: ['jpeg', 'png', 'jpg'],
+        transformation: [
+            { width: 250, height: 250 },
+            { radius: 'max' },
+            { fetch_format: 'auto' },
+        ],
     },
 });
 
