@@ -903,7 +903,7 @@
                     "blood": {
                         "type": "integer",
                         "description": "User's blood type (1|2|3|4)",
-                        "example": 75
+                        "example": 2
                     },
                     "sex": {
                         "type": "string",
@@ -913,7 +913,7 @@
                     "levelActivity": {
                         "type": "integer",
                         "description": "User's level activity (1|2|3|4|5)",
-                        "example": 75
+                        "example": 3
                     }
                 }
             },
