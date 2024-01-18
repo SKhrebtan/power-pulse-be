@@ -1,10 +1,6 @@
 const router = require('express').Router();
 
 const ctrl = require('../../controllers/diaryRecords');
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 const {
     validateBody,
     authenticate,

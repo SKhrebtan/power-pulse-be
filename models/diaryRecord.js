@@ -41,40 +41,38 @@ const exerciseRecordSchema = new Schema({
     },
 });
 
-const diaryRecordSchema = new Schema({
-    date: {
-        type: String,
-        require: true,
-        match: datePattern,
+const diaryRecordSchema = new Schema(
+    {
+        date: {
+            type: String,
+            require: true,
+            match: datePattern,
+        },
+        user: {
+            type: Schema.Types.ObjectID,
+            ref: 'user',
+            required: [true, 'User ID is required'],
+        },
+        products: [productRecordSchema],
+        exercises: [exerciseRecordSchema],
+        caloriesConsumed: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        caloriesBurned: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        activity: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
     },
-<<<<<<< HEAD
-    user: {
-        type: Schema.Types.ObjectID,
-        ref: 'user',
-        required: [true, 'User ID is required'],
-    },
-    products: [productRecordSchema],
-    exercises: [exerciseRecordSchema],
-    caloriesConsumed: {
-        type: Number,
-        required: true,
-        default: 0,
-    },
-    caloriesBurned: {
-        type: Number,
-        required: true,
-        default: 0,
-    },
-    activity: {
-        type: Number,
-        required: true,
-        default: 0,
-    },
-});
-=======
     { versionKey: false }
 );
->>>>>>> main
 
 diaryRecordSchema.post('save', handleMongooseError);
 
@@ -89,13 +87,6 @@ const addDiaryProductSchema = Joi.object({
     date: Joi.string().pattern(datePattern).required().messages({
         'string.pattern.base': 'Enter valid date in the format dd-mm-YYYY',
         'any.required': 'Date is required',
-<<<<<<< HEAD
-    }),
-    product: Joi.string().required().messages({
-        'any.required': 'ProductId is required',
-        'string.base': 'ProductId must be string',
-=======
->>>>>>> main
     }),
     amount: Joi.number().integer().min(1).required().messages({
         'any.required': 'Amount is required',
@@ -111,13 +102,6 @@ const addDiaryExerciseSchema = Joi.object({
     date: Joi.string().pattern(datePattern).required().messages({
         'string.pattern.base': 'Enter valid date in the format dd-mm-YYYY',
         'any.required': 'Date is required',
-<<<<<<< HEAD
-    }),
-    exercise: Joi.string().required().messages({
-        'any.required': 'ExerciseId is required',
-        'string.base': 'ExerciseId must be string',
-=======
->>>>>>> main
     }),
     time: Joi.number().integer().min(1).required().messages({
         'any.required': 'Time is required',
