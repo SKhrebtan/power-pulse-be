@@ -44,29 +44,30 @@ const addDiaryProduct = async (req, res) => {
                 caloriesConsumed: +calories,
             },
         },
-        { new: true }
+        { upsert:true, new: true }
     )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
 
-    if (!currentRecord) {
-        let newRecord = await DiaryRecord.create({
-            user,
-            date,
-            products: [{ product, amount, calories }],
-            caloriesConsumed: calories,
-        });
-        newRecord = await newRecord.populate(
-            'products.product',
-            'title category groupBloodNotAllowed'
-        );
-        newRecord = await newRecord.populate(
-            'exercises.exercise',
-            'name bodyPart equipment target'
-        );
-        res.json(newRecord);
-        return;
-    }
+// REMOVED BECAUSE ADDED UPSERT ABOVE
+    // if (!currentRecord) {
+    //     let newRecord = await DiaryRecord.create({
+    //         user,
+    //         date,
+    //         products: [{ product, amount, calories }],
+    //         caloriesConsumed: calories,
+    //     });
+    //     newRecord = await newRecord.populate(
+    //         'products.product',
+    //         'title category groupBloodNotAllowed'
+    //     );
+    //     newRecord = await newRecord.populate(
+    //         'exercises.exercise',
+    //         'name bodyPart equipment target'
+    //     );
+    //     res.json(newRecord);
+    //     return;
+    // }
     res.json(currentRecord);
 };
 
@@ -96,30 +97,31 @@ const addDiaryExercise = async (req, res) => {
                 activity: +time,
             },
         },
-        { new: true }
+        { upsert: true, new: true }
     )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
 
-    if (!currentRecord) {
-        let newRecord = await DiaryRecord.create({
-            user,
-            date,
-            exercises: [{ exercise, time, calories }],
-            caloriesBurned: calories,
-            activity: time,
-        });
-        newRecord = await newRecord.populate(
-            'products.product',
-            'title category groupBloodNotAllowed'
-        );
-        newRecord = await newRecord.populate(
-            'exercises.exercise',
-            'name bodyPart equipment target'
-        );
-        res.json(newRecord);
-        return;
-    }
+    // removed because use upsert above
+    // if (!currentRecord) {
+    //     let newRecord = await DiaryRecord.create({
+    //         user,
+    //         date,
+    //         exercises: [{ exercise, time, calories }],
+    //         caloriesBurned: calories,
+    //         activity: time,
+    //     });
+    //     newRecord = await newRecord.populate(
+    //         'products.product',
+    //         'title category groupBloodNotAllowed'
+    //     );
+    //     newRecord = await newRecord.populate(
+    //         'exercises.exercise',
+    //         'name bodyPart equipment target'
+    //     );
+    //     res.json(newRecord);
+    //     return;
+    // }
     res.json(currentRecord);
 };
 
