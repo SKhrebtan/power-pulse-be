@@ -1963,6 +1963,306 @@
                     "calories": 100,
                     "time": 5
                 }
+            },
+            "AddProductResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Diary page's ID",
+                        "example": "65a82c2d579ae912a1ac78cb"
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "Date (format dd-mm-yyyy)",
+                        "example": "17-01-2024"
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "Owner user's ID",
+                        "example": "65a5c3bc6b69c2f872091ad0"
+                    },
+                    "exercises": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "exercise": {
+                                    "type": "string",
+                                    "description": "Exercise's ID",
+                                    "example": "65a82c2d579ae912a1ac78cc"
+                                },
+                                "time": {
+                                    "type": "integer",
+                                    "description": "Exercise's spent time",
+                                    "example": 5
+                                },
+                                "calories": {
+                                    "type": "integer",
+                                    "description": "Burned calories",
+                                    "example": 100
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "description": "Added exercise's ID",
+                                    "example": "65a82c2d579ae912a1ac78cc"
+                                }
+                            }
+                        }
+                    },
+                    "caloriesConsumed": {
+                        "type": "integer",
+                        "description": "Total consumed calories at day",
+                        "example": 3000
+                    },
+                    "caloriesBurned": {
+                        "type": "integer",
+                        "description": "Total burned calories at day",
+                        "example": 200
+                    },
+                    "activity": {
+                        "type": "integer",
+                        "description": "Total activity time at day",
+                        "example": 10
+                    },
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "product": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Product's ID",
+                                            "example": "5d51694902b2373622ff5773"
+                                        },
+                                        "category": {
+                                            "type": "string",
+                                            "description": "Product's category",
+                                            "example": "dairy"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Product's title",
+                                            "example": "Danbo cheese"
+                                        }
+                                    }
+                                },
+                                "amount": {
+                                    "type": "integer",
+                                    "description": "Product's amount (g)",
+                                    "example": 200
+                                },
+                                "calories": {
+                                    "type": "integer",
+                                    "description": "Consumed calories",
+                                    "example": 680
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "description": "Added product's ID",
+                                    "example": "65a83fa65629d0b2e2452001"
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "_id": "65a82c2d579ae912a1ac78cb",
+                    "date": "17-01-2024",
+                    "user": "65a5c3bc6b69c2f872091ad0",
+                    "exercises": [
+                        {
+                            "exercise": "64f2458d6f67bc34bae4f7f7",
+                            "time": 5,
+                            "calories": 200,
+                            "_id": "65a82c2d579ae912a1ac78cc"
+                        },
+                        {
+                            "exercise": "64f2458d6f67bc34bae4f801",
+                            "time": 5,
+                            "calories": 200,
+                            "_id": "65a82cab3a18b00ccbf476bd"
+                        }
+                    ],
+                    "caloriesConsumed": 1360,
+                    "caloriesBurned": 400,
+                    "activity": 10,
+                    "products": [
+                        {
+                            "product": {
+                                "_id": "5d51694902b2373622ff5773",
+                                "category": "dairy",
+                                "title": "Danbo cheese"
+                            },
+                            "amount": 200,
+                            "calories": 680,
+                            "_id": "65a83fa65629d0b2e2452001"
+                        },
+                        {
+                            "product": {
+                                "_id": "5d51694902b2373622ff5777",
+                                "category": "dairy",
+                                "title": "Homemade Cheese"
+                            },
+                            "amount": 200,
+                            "calories": 680,
+                            "_id": "65a83fb05629d0b2e245200c"
+                        }
+                    ]
+                }
+            },
+            "AddExerciseResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Diary page's ID",
+                        "example": "65a82c2d579ae912a1ac78cb"
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "Date (format dd-mm-yyyy)",
+                        "example": "17-01-2024"
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "Owner user's ID",
+                        "example": "65a5c3bc6b69c2f872091ad0"
+                    },
+                    "exercises": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "exercise": {
+                                    "type": "string",
+                                    "description": "Exercise's ID",
+                                    "example": "65a82c2d579ae912a1ac78cc"
+                                },
+                                "time": {
+                                    "type": "integer",
+                                    "description": "Exercise's spent time",
+                                    "example": 5
+                                },
+                                "calories": {
+                                    "type": "integer",
+                                    "description": "Burned calories",
+                                    "example": 100
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "description": "Added exercise's ID",
+                                    "example": "65a82c2d579ae912a1ac78cc"
+                                }
+                            }
+                        }
+                    },
+                    "caloriesConsumed": {
+                        "type": "integer",
+                        "description": "Total consumed calories at day",
+                        "example": 3000
+                    },
+                    "caloriesBurned": {
+                        "type": "integer",
+                        "description": "Total burned calories at day",
+                        "example": 200
+                    },
+                    "activity": {
+                        "type": "integer",
+                        "description": "Total activity time at day",
+                        "example": 10
+                    },
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "product": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Product's ID",
+                                            "example": "5d51694902b2373622ff5773"
+                                        },
+                                        "category": {
+                                            "type": "string",
+                                            "description": "Product's category",
+                                            "example": "dairy"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Product's title",
+                                            "example": "Danbo cheese"
+                                        }
+                                    }
+                                },
+                                "amount": {
+                                    "type": "integer",
+                                    "description": "Product's amount (g)",
+                                    "example": 200
+                                },
+                                "calories": {
+                                    "type": "integer",
+                                    "description": "Consumed calories",
+                                    "example": 680
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "description": "Added product's ID",
+                                    "example": "65a83fa65629d0b2e2452001"
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "_id": "65a82c2d579ae912a1ac78cb",
+                    "date": "17-01-2024",
+                    "user": "65a5c3bc6b69c2f872091ad0",
+                    "exercises": [
+                        {
+                            "exercise": "64f2458d6f67bc34bae4f7f7",
+                            "time": 5,
+                            "calories": 200,
+                            "_id": "65a82c2d579ae912a1ac78cc"
+                        },
+                        {
+                            "exercise": "64f2458d6f67bc34bae4f801",
+                            "time": 5,
+                            "calories": 200,
+                            "_id": "65a82cab3a18b00ccbf476bd"
+                        }
+                    ],
+                    "caloriesConsumed": 1360,
+                    "caloriesBurned": 400,
+                    "activity": 10,
+                    "products": [
+                        {
+                            "product": {
+                                "_id": "5d51694902b2373622ff5773",
+                                "category": "dairy",
+                                "title": "Danbo cheese"
+                            },
+                            "amount": 200,
+                            "calories": 680,
+                            "_id": "65a83fa65629d0b2e2452001"
+                        },
+                        {
+                            "product": {
+                                "_id": "5d51694902b2373622ff5777",
+                                "category": "dairy",
+                                "title": "Homemade Cheese"
+                            },
+                            "amount": 200,
+                            "calories": 680,
+                            "_id": "65a83fb05629d0b2e245200c"
+                        }
+                    ]
+                }
             }
         },
         "securitySchemes": {
