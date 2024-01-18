@@ -101,8 +101,22 @@ const addDiaryExercise = async (req, res) => {
     if (!result)
         throw HttpError(404, `Exercise by ID: "${exercise}" not found`);
 
-    const currentRecord = await DiaryRecord.findOneAndUpdate(
-        { user, date },
+    const filter = {
+        user,
+        date,
+        "exercises.exercise":exercise
+    }
+
+    // check if currentExercise exist in diary
+    const currentExerciseCount = await DiaryRecord.countDocuments(filter);
+
+    // if doesn't exist in diary create new exercise, else update current record
+    if (!currentExerciseCount) {
+        const currentRecord = await DiaryRecord.findOneAndUpdate(
+        {
+            user,
+            date,
+        },
         {
             $push: {
                 exercises: {
@@ -116,32 +130,38 @@ const addDiaryExercise = async (req, res) => {
                 activity: +time,
             },
         },
-        { upsert: true, new: true }
+        {
+            upsert:true,
+            new: true
+        }
     )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
+        
+        res.json(currentRecord);
 
-    // removed because use upsert above
-    // if (!currentRecord) {
-    //     let newRecord = await DiaryRecord.create({
-    //         user,
-    //         date,
-    //         exercises: [{ exercise, time, calories }],
-    //         caloriesBurned: calories,
-    //         activity: time,
-    //     });
-    //     newRecord = await newRecord.populate(
-    //         'products.product',
-    //         'title category groupBloodNotAllowed'
-    //     );
-    //     newRecord = await newRecord.populate(
-    //         'exercises.exercise',
-    //         'name bodyPart equipment target'
-    //     );
-    //     res.json(newRecord);
-    //     return;
-    // }
-    res.json(currentRecord);
+    } else {
+        const currentRecord = await DiaryRecord.findOneAndUpdate(
+        filter,
+        {
+            $inc: {
+                caloriesBurned: +calories,
+                activity: +time,
+                "exercises.$[element].time": +time,
+                "exercises.$[element].calories": +calories,
+            },
+        },
+        {
+           arrayFilters:[{"element.exercise":exercise}],
+            new: true
+        }
+    )
+        .populate('products.product', 'title category groupBloodNotAllowed')
+        .populate('exercises.exercise', 'name bodyPart equipment target');
+        
+        res.json(currentRecord);
+    };
+    
 };
 
 module.exports = {
