@@ -21,7 +21,6 @@ const getCurrentDiaryRecord = async (req, res) => {
 };
 
 // added product to the diary
-// later should add functionality to add up same product information in 1 entry
 const addDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
     const { productId: product } = req.params;
@@ -30,17 +29,18 @@ const addDiaryProduct = async (req, res) => {
     const result = await Product.findById(product);
     if (!result) throw HttpError(404, `Product by ID: "${product}" not found`);
 
+    // filter to check if product exists in diary
     const filter = {
         user,
         date,
         "products.product":product
     }
 
+    // check if currentProduct exist in diary
     const currentProductCount = await DiaryRecord.countDocuments(filter);
 
-    console.log(currentProductCount);
-
-    if (currentProductCount===0) {
+    // if doesn't exist in diary create new product, else update current record
+    if (!currentProductCount) {
         const currentRecord = await DiaryRecord.findOneAndUpdate(
         {
             user,
@@ -59,6 +59,7 @@ const addDiaryProduct = async (req, res) => {
             },
         },
         {
+            upsert:true,
             new: true
         }
     )
@@ -86,28 +87,7 @@ const addDiaryProduct = async (req, res) => {
         .populate('exercises.exercise', 'name bodyPart equipment target');
         
         res.json(currentRecord);
-    }
-
-    
-// REMOVED BECAUSE ADDED UPSERT ABOVE
-    // if (!currentRecord) {
-    //     let newRecord = await DiaryRecord.create({
-    //         user,
-    //         date,
-    //         products: [{ product, amount, calories }],
-    //         caloriesConsumed: calories,
-    //     });
-    //     newRecord = await newRecord.populate(
-    //         'products.product',
-    //         'title category groupBloodNotAllowed'
-    //     );
-    //     newRecord = await newRecord.populate(
-    //         'exercises.exercise',
-    //         'name bodyPart equipment target'
-    //     );
-    //     res.json(newRecord);
-    //     return;
-    // }
+    };
 };
 
 // add exercise to diary
