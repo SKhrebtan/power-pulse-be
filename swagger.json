@@ -735,7 +735,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserUpdateResponse"
+                                    "$ref": "#/components/schemas/AddProductResponse"
                                 }
                             }
                         }
@@ -804,7 +804,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UpdateAvatarResponse"
+                                    "$ref": "#/components/schemas/AddExerciseResponse"
                                 }
                             }
                         }
