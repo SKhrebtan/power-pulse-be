@@ -1,4 +1,5 @@
 const { Exercise } = require('../models/exercise');
+const { Filter } = require('../models/filter');
 const { HttpError, ctrlWrapper } = require('../helpers');
 
 const getAllExercises = async (req, res) => {
@@ -37,7 +38,18 @@ const getExerciseById = async (req, res) => {
     res.json(result);
 };
 
+const getAllFilters = async (req, res) => {
+    const { filter = 'Body parts' } = req.query;
+
+    const result = await Filter.find({ filter });
+    if (!result.length)
+        throw HttpError(400, 'Please change filter: "Equipment" or "Muscles"');
+
+    res.json(result);
+};
+
 module.exports = {
     getAllExercises: ctrlWrapper(getAllExercises),
     getExerciseById: ctrlWrapper(getExerciseById),
+    getAllFilters: ctrlWrapper(getAllFilters),
 };

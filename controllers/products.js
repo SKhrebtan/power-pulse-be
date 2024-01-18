@@ -1,4 +1,5 @@
 const { Product } = require('../models/product');
+const { Category } = require('../models/category');
 const { ctrlWrapper, HttpError } = require('../helpers');
 
 const getAllProducts = async (req, res) => {
@@ -195,7 +196,13 @@ const getProductById = async (req, res) => {
     res.json(result);
 };
 
+const getAllCategories = async (req, res) => {
+    const result = await Category.find({}, '-_id');
+    res.json(result[0].categories);
+};
+
 module.exports = {
     getAllProducts: ctrlWrapper(getAllProducts),
     getProductById: ctrlWrapper(getProductById),
+    getAllCategories: ctrlWrapper(getAllCategories),
 };
