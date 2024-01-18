@@ -72,29 +72,15 @@ const logout = async (req, res) => {
 };
 
 const update = async (req, res, next) => {
-    const { userId } = req.params;
     const { _id } = req.user;
-
-    if (userId !== _id.toString())
-        throw HttpError(403, "You don't have permission to access");
 
     const { ...updatedUserData } = req.body;
 
-    const user = await User.findByIdAndUpdate(userId, updatedUserData);
+    const user = await User.findByIdAndUpdate(_id, updatedUserData);
 
     if (!user) {
-        throw new HttpError(404, `User by ID: "${userId}" not found`);
+        throw new HttpError(404, `User by ID: "${_id}" not found`);
     }
-
-    // if (
-    //     !user.height ||
-    //     !user.currentWeight ||
-    //     !user.birthday ||
-    //     !user.sex ||
-    //     !user.levelActivity
-    // ) {
-    //     throw new HttpError(400, 'Please fill in all information');
-    // }
 
     user.dailyCalories = BMR(
         user.sex,
@@ -117,7 +103,6 @@ const updateAvatar = async (req, res, next) => {
     const { _id } = req.user;
     const avatarURL = req.file.path;
     console.log(req.file);
-
 
     await User.findByIdAndUpdate(
         _id,

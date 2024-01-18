@@ -20,13 +20,7 @@ router.post('/login', validateBody(loginSchema), authCtrl.login);
 router.get('/current', authenticate, authCtrl.current);
 router.post('/logout', authenticate, authCtrl.logout);
 
-router.patch(
-    '/:userId',
-    authenticate,
-    isValidId,
-    validateBody(updateSchema),
-    authCtrl.update
-);
+router.patch(authenticate, validateBody(updateSchema), authCtrl.update);
 
 router.put(
     '/upload',
