@@ -1,6 +1,11 @@
 const { DiaryRecord } = require('../models/diaryRecord');
 
 const { HttpError, ctrlWrapper } = require('../helpers');
+<<<<<<< HEAD
+=======
+const { Exercise } = require('../models/exercise');
+const { Product } = require('../models/product');
+>>>>>>> main
 
 // get specific record, by date for authorized user
 const getCurrentDiaryRecord = async (req, res) => {
@@ -22,8 +27,17 @@ const getCurrentDiaryRecord = async (req, res) => {
 // later should add functionality to add up same product information in 1 entry
 const addDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
+<<<<<<< HEAD
     const { date, product, amount, calories } = req.body;
 
+=======
+    const { productId: product } = req.params;
+    const { date, amount, calories } = req.body;
+
+    const result = await Product.findById(product);
+    if (!result) throw HttpError(404, `Product by ID: "${product}" not found`);
+
+>>>>>>> main
     const currentRecord = await DiaryRecord.findOneAndUpdate(
         { user, date },
         {
@@ -68,8 +82,18 @@ const addDiaryProduct = async (req, res) => {
 // later should add functionality to add up same product information in 1 entry sum up time, or add repetition field and update it
 const addDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
+<<<<<<< HEAD
     const { date, exercise, time, calories } = req.body;
 
+=======
+    const { exerciseId: exercise } = req.params;
+    const { date, time, calories } = req.body;
+
+    const result = await Exercise.findById(exercise);
+    if (!result)
+        throw HttpError(404, `Exercise by ID: "${exercise}" not found`);
+
+>>>>>>> main
     const currentRecord = await DiaryRecord.findOneAndUpdate(
         { user, date },
         {
@@ -175,6 +199,9 @@ module.exports = {
     getCurrentDiaryRecord: ctrlWrapper(getCurrentDiaryRecord),
     addDiaryProduct: ctrlWrapper(addDiaryProduct),
     addDiaryExercise: ctrlWrapper(addDiaryExercise),
+<<<<<<< HEAD
     removeDiaryProduct: ctrlWrapper(removeDiaryProduct),
     removeDiaryExercise: ctrlWrapper(removeDiaryExercise),
+=======
+>>>>>>> main
 };

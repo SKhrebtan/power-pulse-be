@@ -1,11 +1,15 @@
 const router = require('express').Router();
 
 const ctrl = require('../../controllers/diaryRecords');
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 const {
     validateBody,
     authenticate,
     validateParams,
+    isValidId,
 } = require('../../middlewares');
 
 const { schemas } = require('../../models/diaryRecord');
@@ -20,16 +24,18 @@ router.get(
 
 // add exercise to diary
 router.post(
-    '/add-exercise',
+    '/add-exercise/:exerciseId',
     authenticate,
+    isValidId,
     validateBody(schemas.addDiaryExerciseSchema),
     ctrl.addDiaryExercise
 );
 
 // add product to diary
 router.post(
-    '/add-product',
+    '/add-product/:productId',
     authenticate,
+    isValidId,
     validateBody(schemas.addDiaryProductSchema),
     ctrl.addDiaryProduct
 );

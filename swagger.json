@@ -1,7 +1,7 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "version": "1.0.2",
+        "version": "1.0.3",
         "title": "Power Pulse API Documentation",
         "description": "REST API documentation for project 'Power Pulse'",
         "license": {
@@ -35,6 +35,10 @@
         {
             "name": "Exercises",
             "description": "Exercises endpoints"
+        },
+        {
+            "name": "Diary",
+            "description": "Diary endpoints"
         }
     ],
     "paths": {
@@ -267,6 +271,57 @@
                 }
             }
         },
+        "/users/upload": {
+            "put": {
+                "tags": ["Auth"],
+                "summary": "User update avatar",
+                "parameters": [],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "description": "Update avatar object (form-data:file)",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateAvatarRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateAvatarResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "415": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadReqBodyUpdateAvatarResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/categories": {
             "get": {
                 "tags": ["Categories"],
@@ -335,6 +390,7 @@
                     {
                         "in": "query",
                         "name": "bloodType",
+                        "required": true,
                         "type": "integer",
                         "description": "Blood type (1|2|3|4)"
                     }
@@ -553,6 +609,202 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ExercisesByIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid ID)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found exercise by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundByIdResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/diary-records/{date}": {
+            "get": {
+                "tags": ["Diary"],
+                "summary": "Get diary by date (DATE format dd-mm-YYYY)",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "date",
+                        "required": true,
+                        "type": "string",
+                        "description": "Date's diary page"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DiaryByDateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid DATE)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadReqDiaryByDateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found diary page by date",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundDiaryByDateResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/diary-records/add-product/{productId}": {
+            "post": {
+                "tags": ["Diary"],
+                "summary": "Add product to diary",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "productId",
+                        "required": true,
+                        "type": "string",
+                        "description": "Product's ID"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "description": "Diary's update product object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddProductRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserUpdateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid ID)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found product by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundByIdResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/diary-records/add-exercise/{exerciseId}": {
+            "post": {
+                "tags": ["Diary"],
+                "summary": "Add exercise to diary",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "exerciseId",
+                        "required": true,
+                        "type": "string",
+                        "description": "Exercise's ID"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "requestBody": {
+                    "description": "Diary's update exercise object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddExerciseRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateAvatarResponse"
                                 }
                             }
                         }
@@ -903,7 +1155,7 @@
                     "blood": {
                         "type": "integer",
                         "description": "User's blood type (1|2|3|4)",
-                        "example": 75
+                        "example": 2
                     },
                     "sex": {
                         "type": "string",
@@ -913,7 +1165,7 @@
                     "levelActivity": {
                         "type": "integer",
                         "description": "User's level activity (1|2|3|4|5)",
-                        "example": 75
+                        "example": 3
                     }
                 }
             },
@@ -1017,6 +1269,27 @@
                         "type": "string",
                         "description": "Message logout success",
                         "example": "Logout success"
+                    }
+                }
+            },
+            "UpdateAvatarResponse": {
+                "type": "object",
+                "properties": {
+                    "avatarURL": {
+                        "type": "string",
+                        "description": "URL new avatar",
+                        "example": "https://res.cloudinary.com/doiiko7sq/image/upload/v1705510039/Avatars/dgzpd9mwxv5gzzz9bzll.jpg"
+                    }
+                }
+            },
+            "UpdateAvatarRequest": {
+                "type": "object",
+                "required": ["image"],
+                "properties": {
+                    "image": {
+                        "type": "string",
+                        "format": "binary",
+                        "description": "Avatar's image (.jpg | .jpeg | .png)"
                     }
                 }
             },
@@ -1452,6 +1725,243 @@
                         "description": "Message used email",
                         "example": "Email in use"
                     }
+                }
+            },
+            "BadReqBodyUpdateAvatarResponse": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "description": "Message bad request body",
+                        "example": "Unsupported Media Type"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Message bad request body",
+                        "example": "An unknown file format not allowed"
+                    }
+                }
+            },
+            "DiaryByDateResponse": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Diary page's ID",
+                        "example": "65a82c2d579ae912a1ac78cb"
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "Date (format dd-mm-yyyy)",
+                        "example": "17-01-2024"
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "Owner user's ID",
+                        "example": "65a5c3bc6b69c2f872091ad0"
+                    },
+                    "exercises": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "exercise": {
+                                    "type": "string",
+                                    "description": "Exercise's ID",
+                                    "example": "65a82c2d579ae912a1ac78cc"
+                                },
+                                "time": {
+                                    "type": "integer",
+                                    "description": "Exercise's spent time",
+                                    "example": 5
+                                },
+                                "calories": {
+                                    "type": "integer",
+                                    "description": "Burned calories",
+                                    "example": 100
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "description": "Added exercise's ID",
+                                    "example": "65a82c2d579ae912a1ac78cc"
+                                }
+                            }
+                        }
+                    },
+                    "caloriesConsumed": {
+                        "type": "integer",
+                        "description": "Total consumed calories at day",
+                        "example": 3000
+                    },
+                    "caloriesBurned": {
+                        "type": "integer",
+                        "description": "Total burned calories at day",
+                        "example": 200
+                    },
+                    "activity": {
+                        "type": "integer",
+                        "description": "Total activity time at day",
+                        "example": 10
+                    },
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "product": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Product's ID",
+                                            "example": "5d51694902b2373622ff5773"
+                                        },
+                                        "category": {
+                                            "type": "string",
+                                            "description": "Product's category",
+                                            "example": "dairy"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Product's title",
+                                            "example": "Danbo cheese"
+                                        }
+                                    }
+                                },
+                                "amount": {
+                                    "type": "integer",
+                                    "description": "Product's amount (g)",
+                                    "example": 200
+                                },
+                                "calories": {
+                                    "type": "integer",
+                                    "description": "Consumed calories",
+                                    "example": 680
+                                },
+                                "_id": {
+                                    "type": "string",
+                                    "description": "Added product's ID",
+                                    "example": "65a83fa65629d0b2e2452001"
+                                }
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "_id": "65a82c2d579ae912a1ac78cb",
+                    "date": "17-01-2024",
+                    "user": "65a5c3bc6b69c2f872091ad0",
+                    "exercises": [
+                        {
+                            "exercise": "64f2458d6f67bc34bae4f7f7",
+                            "time": 5,
+                            "calories": 200,
+                            "_id": "65a82c2d579ae912a1ac78cc"
+                        },
+                        {
+                            "exercise": "64f2458d6f67bc34bae4f801",
+                            "time": 5,
+                            "calories": 200,
+                            "_id": "65a82cab3a18b00ccbf476bd"
+                        }
+                    ],
+                    "caloriesConsumed": 1360,
+                    "caloriesBurned": 400,
+                    "activity": 10,
+                    "products": [
+                        {
+                            "product": {
+                                "_id": "5d51694902b2373622ff5773",
+                                "category": "dairy",
+                                "title": "Danbo cheese"
+                            },
+                            "amount": 200,
+                            "calories": 680,
+                            "_id": "65a83fa65629d0b2e2452001"
+                        },
+                        {
+                            "product": {
+                                "_id": "5d51694902b2373622ff5777",
+                                "category": "dairy",
+                                "title": "Homemade Cheese"
+                            },
+                            "amount": 200,
+                            "calories": 680,
+                            "_id": "65a83fb05629d0b2e245200c"
+                        }
+                    ]
+                }
+            },
+            "BadReqDiaryByDateResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message bad request date format",
+                        "example": "Enter valid date in the format dd-mm-YYYY"
+                    }
+                }
+            },
+            "NotFoundDiaryByDateResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message not found by DATE",
+                        "example": "No records for this date"
+                    }
+                }
+            },
+            "AddProductRequest": {
+                "type": "object",
+                "required": ["date", "calories", "amount"],
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "description": "Date (format dd-mm-yyyy)",
+                        "example": "17-01-2024"
+                    },
+                    "calories": {
+                        "type": "integer",
+                        "description": "Consumed calories",
+                        "example": 680
+                    },
+                    "amount": {
+                        "type": "integer",
+                        "description": "Product's amount (g)",
+                        "example": 200
+                    }
+                },
+                "example": {
+                    "date": "17-01-2024",
+                    "calories": 680,
+                    "amount": 200
+                }
+            },
+            "AddExerciseRequest": {
+                "type": "object",
+                "required": ["date", "calories", "time"],
+                "properties": {
+                    "date": {
+                        "type": "string",
+                        "description": "Date (format dd-mm-yyyy)",
+                        "example": "17-01-2024"
+                    },
+                    "calories": {
+                        "type": "integer",
+                        "description": "Burned calories",
+                        "example": 100
+                    },
+                    "time": {
+                        "type": "integer",
+                        "description": "Exercise's spent time",
+                        "example": 5
+                    }
+                },
+                "example": {
+                    "date": "17-01-2024",
+                    "calories": 100,
+                    "time": 5
                 }
             }
         },
