@@ -30,8 +30,22 @@ const addDiaryProduct = async (req, res) => {
     const result = await Product.findById(product);
     if (!result) throw HttpError(404, `Product by ID: "${product}" not found`);
 
-    const currentRecord = await DiaryRecord.findOneAndUpdate(
-        { user, date },
+    const filter = {
+        user,
+        date,
+        "products.product":product
+    }
+
+    const currentProductCount = await DiaryRecord.countDocuments(filter);
+
+    console.log(currentProductCount);
+
+    if (currentProductCount===0) {
+        const currentRecord = await DiaryRecord.findOneAndUpdate(
+        {
+            user,
+            date,
+        },
         {
             $push: {
                 products: {
@@ -44,11 +58,37 @@ const addDiaryProduct = async (req, res) => {
                 caloriesConsumed: +calories,
             },
         },
-        { upsert:true, new: true }
+        {
+            new: true
+        }
     )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
+        
+        res.json(currentRecord);
 
+    } else {
+        const currentRecord = await DiaryRecord.findOneAndUpdate(
+        filter,
+        {
+            $inc: {
+                caloriesConsumed: +calories,
+                "products.$[element].amount": +amount,
+                "products.$[element].calories": +calories,
+            },
+        },
+        {
+           arrayFilters:[{"element.product":product}],
+            new: true
+        }
+    )
+        .populate('products.product', 'title category groupBloodNotAllowed')
+        .populate('exercises.exercise', 'name bodyPart equipment target');
+        
+        res.json(currentRecord);
+    }
+
+    
 // REMOVED BECAUSE ADDED UPSERT ABOVE
     // if (!currentRecord) {
     //     let newRecord = await DiaryRecord.create({
@@ -68,7 +108,6 @@ const addDiaryProduct = async (req, res) => {
     //     res.json(newRecord);
     //     return;
     // }
-    res.json(currentRecord);
 };
 
 // add exercise to diary
