@@ -130,7 +130,10 @@ const addDiaryExercise = async (req, res) => {
                 activity: +time,
             },
         },
-        { new: true }
+            {
+                upsert: true,
+                new: true
+            }
     )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
@@ -203,11 +206,25 @@ const removeDiaryProduct = async (req, res) => {
 const removeDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
     const { date, exerciseId: exercise } = req.params;
-    const { time, calories } = req.body;
+    // const { time, calories } = req.body;
 
     const result = await Exercise.findById(exercise);
     if (!result)
         throw HttpError(404, `Exercise by ID: "${exercise}" not found`);
+
+    const currentExercise = await DiaryRecord.findOne(
+        {
+            user,
+            date,
+            "exercises.exercise": exercise
+        }
+    );
+
+    if (!currentExercise) {
+        throw HttpError(404, `Exercise with id ${exercise} has no records for this date`);
+    }
+
+    const { time, calories } = currentExercise.exercises.find(exercise => exercise);
 
     const currentRecord = await DiaryRecord.findOneAndUpdate(
         {
@@ -230,11 +247,9 @@ const removeDiaryExercise = async (req, res) => {
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
 
-    if (!currentRecord) {
-        throw HttpError(404, `Exercise with id ${exercise} has no records for this date`);
-    }
-
     res.json(currentRecord);
+
+
 };
 
 module.exports = {
