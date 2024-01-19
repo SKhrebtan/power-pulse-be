@@ -163,7 +163,7 @@ const addDiaryExercise = async (req, res) => {
 
 const removeDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
-    const { date, itemId: product } = req.params;
+    const { date, productId: product } = req.params;
     const { calories } = req.body;
 
     const result = await Product.findById(product);
@@ -194,7 +194,7 @@ const removeDiaryProduct = async (req, res) => {
         .populate('exercises.exercise', 'name bodyPart equipment target');
 
     if (!currentRecord) {
-        throw HttpError(404, 'No records for this date');
+        throw HttpError(404, `Product with id ${product} has no records for this date`);
     }
 
     res.json(currentRecord);
