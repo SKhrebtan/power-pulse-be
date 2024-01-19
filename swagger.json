@@ -84,6 +84,106 @@
                 }
             }
         },
+        "/users/verify": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "User's email verification",
+                "parameters": [],
+                "requestBody": {
+                    "description": "Verification's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VerificationRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VerifyResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email verified",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmailVerifiedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundVerifyResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/verifyResend": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Resend email verification",
+                "parameters": [],
+                "requestBody": {
+                    "description": "Email's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmailRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResendResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email verified",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmailVerifiedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundVerifyResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/login": {
             "post": {
                 "tags": ["Auth"],
@@ -1843,6 +1943,69 @@
                     "date": "17-01-2024",
                     "calories": 100,
                     "time": 5
+                }
+            },
+            "VerificationRequest": {
+                "type": "object",
+                "required": ["verificationToken"],
+                "properties": {
+                    "verificationToken": {
+                        "type": "string",
+                        "description": "Verification token",
+                        "example": "ALA0d7kZkpE1ViD2VGOWI"
+                    }
+                }
+            },
+            "EmailRequest": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email",
+                        "example": "user@mail.com"
+                    }
+                }
+            },
+            "VerifyResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message verification successful",
+                        "example": "Verification successful!"
+                    }
+                }
+            },
+            "ResendResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message verification email sent",
+                        "example": "Verification email sent"
+                    }
+                }
+            },
+            "NotFoundVerifyResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message not found",
+                        "example": "User not found"
+                    }
+                }
+            },
+            "EmailVerifiedResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "Message already verified",
+                        "example": "Email already verify"
+                    }
                 }
             }
         },

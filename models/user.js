@@ -73,6 +73,14 @@ const userSchema = new Schema(
             default:
                 'https://res.cloudinary.com/doiiko7sq/image/upload/v1705323621/default-avatar/default_dmhmqw.jpg',
         },
+        verify: {
+            type: Boolean,
+            default: false,
+        },
+        verificationToken: {
+            type: String,
+            required: [true, 'Verify token is required'],
+        },
     },
     { versionKey: false, timestamps: true }
 );
@@ -111,10 +119,20 @@ const updateSchema = Joi.object({
     levelActivity: Joi.number().required().valid(1, 2, 3, 4, 5),
 });
 
+const verifyEmailSchema = Joi.object({
+    email: Joi.string().email().pattern(emailPattern).required(),
+});
+
+const verifyTokenSchema = Joi.object({
+    verificationToken: Joi.string().required(),
+});
+
 const User = model('user', userSchema);
 module.exports = {
     User,
     registerSchema,
     loginSchema,
     updateSchema,
+    verifyTokenSchema,
+    verifyEmailSchema,
 };
