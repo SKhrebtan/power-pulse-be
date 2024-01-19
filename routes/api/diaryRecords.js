@@ -41,7 +41,6 @@ router.patch(
     authenticate,
     isValidId,
     validateParams(schemas.checkDateAndIdForRemovalSchema),
-    validateBody(schemas.removeDiaryProductSchema),
     ctrl.removeDiaryProduct
 );
 
@@ -50,7 +49,6 @@ router.patch(
     authenticate,
     isValidId,
     validateParams(schemas.checkDateAndIdForRemovalSchema),
-    validateBody(schemas.removeDiaryExerciseSchema),
     ctrl.removeDiaryExercise
 );
 

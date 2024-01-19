@@ -167,13 +167,28 @@ const addDiaryExercise = async (req, res) => {
 const removeDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
     const { date, productId: product } = req.params;
-    const { calories } = req.body;
 
     const result = await Product.findById(product);
     if (!result)
         throw HttpError(404, `Product by ID: "${product}" not found`);
 
-    const currentRecord = await DiaryRecord.findOneAndUpdate(
+    let currentRecord = await DiaryRecord.findOne(
+        {
+            date,
+            user,
+            "products.product": product,
+        }
+    );
+
+    if (!currentRecord) {
+        throw HttpError(404, `Product with id ${product} has no records for this date`);
+    };
+
+    const { calories } = currentRecord.products.find(record => {
+        return record.product.toString() === product;
+    });
+
+    currentRecord = await DiaryRecord.findOneAndUpdate(
         {
             user,
             date,
@@ -196,23 +211,18 @@ const removeDiaryProduct = async (req, res) => {
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
 
-    if (!currentRecord) {
-        throw HttpError(404, `Product with id ${product} has no records for this date`);
-    }
-
     res.json(currentRecord);
 };
 
 const removeDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
     const { date, exerciseId: exercise } = req.params;
-    // const { time, calories } = req.body;
 
     const result = await Exercise.findById(exercise);
     if (!result)
         throw HttpError(404, `Exercise by ID: "${exercise}" not found`);
 
-    const currentExercise = await DiaryRecord.findOne(
+    let currentRecord = await DiaryRecord.findOne(
         {
             user,
             date,
@@ -220,13 +230,19 @@ const removeDiaryExercise = async (req, res) => {
         }
     );
 
-    if (!currentExercise) {
+    if (!currentRecord) {
         throw HttpError(404, `Exercise with id ${exercise} has no records for this date`);
     }
 
-    const { time, calories } = currentExercise.exercises.find(exercise => exercise);
 
-    const currentRecord = await DiaryRecord.findOneAndUpdate(
+
+    const { time, calories } = currentRecord.exercises.find(record => {
+        return record.exercise.toString() === exercise;
+    });
+
+
+
+    currentRecord = await DiaryRecord.findOneAndUpdate(
         {
             user,
             date,

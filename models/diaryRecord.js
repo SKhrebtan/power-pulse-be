@@ -136,30 +136,10 @@ const addDiaryExerciseSchema = Joi.object({
     }),
 });
 
-const removeDiaryProductSchema = Joi.object({
-    calories: Joi.number().integer().min(1).required().messages({
-        'any.required': 'Calories are required',
-        'number.min': 'At least 1 calorie must be removed',
-    }),
-});
-
-const removeDiaryExerciseSchema = Joi.object({
-    time: Joi.number().integer().min(1).required().messages({
-        'any.required': 'Time is required',
-        'number.min': 'At least 1 minute must be removed',
-    }),
-    calories: Joi.number().integer().min(1).required().messages({
-        'any.required': 'Calories are required',
-        'number.min': 'At least 1 calorie must be removed',
-    }),
-});
-
 const schemas = {
     addDiaryProductSchema,
     addDiaryExerciseSchema,
     checkDateSchema,
-    removeDiaryProductSchema,
-    removeDiaryExerciseSchema,
     checkDateAndIdForRemovalSchema
 };
 
