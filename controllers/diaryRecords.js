@@ -91,6 +91,7 @@ const addDiaryProduct = async (req, res) => {
 };
 
 // add exercise to diary
+
 const addDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
     const { exerciseId: exercise } = req.params;
@@ -162,11 +163,19 @@ const addDiaryExercise = async (req, res) => {
 
 const removeDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
-    const { date } = req.params;
-    const { product, calories } = req.body;
+    const { date, itemId: product } = req.params;
+    const { calories } = req.body;
+
+    const result = await Product.findById(product);
+    if (!result)
+        throw HttpError(404, `Product by ID: "${product}" not found`);
 
     const currentRecord = await DiaryRecord.findOneAndUpdate(
-        { user, date },
+        {
+            user,
+            date,
+            "products.product":product,
+        },
         {
             $inc: {
                 caloriesConsumed: -calories,
@@ -177,7 +186,9 @@ const removeDiaryProduct = async (req, res) => {
                 },
             },
         },
-        { new: true }
+        {
+            new: true
+        }
     )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
@@ -193,6 +204,10 @@ const removeDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
     const { date } = req.params;
     const { exercise, time, calories } = req.body;
+
+    const result = await Exercise.findById(exercise);
+    if (!result)
+        throw HttpError(404, `Exercise by ID: "${exercise}" not found`);
 
     const currentRecord = await DiaryRecord.findOneAndUpdate(
         { user, date },

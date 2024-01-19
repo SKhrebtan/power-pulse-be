@@ -37,16 +37,16 @@ router.post(
 );
 
 router.patch(
-    '/:date/remove-product/:productId',
+    '/:date/remove-product/:itemId',
     authenticate,
     isValidId,
-    validateParams(schemas.checkDateSchema),
+    validateParams(schemas.checkDateAndIdSchema),
     validateBody(schemas.removeDiaryProductSchema),
     ctrl.removeDiaryProduct
 );
 
 router.patch(
-    '/:date/remove-exercise/:exerciseId',
+    '/:date/remove-exercise/:itemId',
     authenticate,
     isValidId,
     validateParams(schemas.checkDateSchema),
