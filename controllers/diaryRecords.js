@@ -91,7 +91,7 @@ const addDiaryProduct = async (req, res) => {
 };
 
 // add exercise to diary
-// later should add functionality to add up same product information in 1 entry sum up time, or add repetition field and update it
+
 const addDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
     const { exerciseId: exercise } = req.params;
@@ -130,10 +130,10 @@ const addDiaryExercise = async (req, res) => {
                 activity: +time,
             },
         },
-        {
-            upsert:true,
-            new: true
-        }
+            {
+                upsert: true,
+                new: true
+            }
     )
         .populate('products.product', 'title category groupBloodNotAllowed')
         .populate('exercises.exercise', 'name bodyPart equipment target');
@@ -164,8 +164,114 @@ const addDiaryExercise = async (req, res) => {
     
 };
 
+const removeDiaryProduct = async (req, res) => {
+    const { _id: user } = req.user;
+    const { date, productId: product } = req.params;
+
+    const result = await Product.findById(product);
+    if (!result)
+        throw HttpError(404, `Product by ID: "${product}" not found`);
+
+    let currentRecord = await DiaryRecord.findOne(
+        {
+            date,
+            user,
+            "products.product": product,
+        }
+    );
+
+    if (!currentRecord) {
+        throw HttpError(404, `Product with id ${product} has no records for this date`);
+    };
+
+    const { calories } = currentRecord.products.find(record => {
+        return record.product.toString() === product;
+    });
+
+    currentRecord = await DiaryRecord.findOneAndUpdate(
+        {
+            user,
+            date,
+            "products.product":product,
+        },
+        {
+            $inc: {
+                caloriesConsumed: -calories,
+            },
+            $pull: {
+                products: {
+                    product: product,
+                },
+            },
+        },
+        {
+            new: true
+        }
+    )
+        .populate('products.product', 'title category groupBloodNotAllowed')
+        .populate('exercises.exercise', 'name bodyPart equipment target');
+
+    res.json(currentRecord);
+};
+
+const removeDiaryExercise = async (req, res) => {
+    const { _id: user } = req.user;
+    const { date, exerciseId: exercise } = req.params;
+
+    const result = await Exercise.findById(exercise);
+    if (!result)
+        throw HttpError(404, `Exercise by ID: "${exercise}" not found`);
+
+    let currentRecord = await DiaryRecord.findOne(
+        {
+            user,
+            date,
+            "exercises.exercise": exercise
+        }
+    );
+
+    if (!currentRecord) {
+        throw HttpError(404, `Exercise with id ${exercise} has no records for this date`);
+    }
+
+
+
+    const { time, calories } = currentRecord.exercises.find(record => {
+        return record.exercise.toString() === exercise;
+    });
+
+
+
+    currentRecord = await DiaryRecord.findOneAndUpdate(
+        {
+            user,
+            date,
+            "exercises.exercise":exercise},
+        {
+            $inc: {
+                caloriesBurned: -calories,
+                activity: -time,
+            },
+            $pull: {
+                exercises: {
+                    exercise,
+                },
+            },
+        },
+        { new: true }
+    )
+        .populate('products.product', 'title category groupBloodNotAllowed')
+        .populate('exercises.exercise', 'name bodyPart equipment target');
+
+    res.json(currentRecord);
+
+
+};
+
 module.exports = {
     getCurrentDiaryRecord: ctrlWrapper(getCurrentDiaryRecord),
     addDiaryProduct: ctrlWrapper(addDiaryProduct),
     addDiaryExercise: ctrlWrapper(addDiaryExercise),
+    removeDiaryProduct: ctrlWrapper(removeDiaryProduct),
+    removeDiaryExercise: ctrlWrapper(removeDiaryExercise),
 };

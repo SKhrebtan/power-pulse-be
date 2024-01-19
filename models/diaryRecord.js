@@ -83,6 +83,29 @@ const checkDateSchema = Joi.object({
     }),
 });
 
+const checkDateAndIdForRemovalSchema = Joi.alternatives().try(
+    Joi.object({
+        date: Joi.string().pattern(datePattern).required().messages({
+            'string.pattern.base': 'Enter valid date in the format dd-mm-YYYY',
+            'any.required': 'Date is required',
+        }),
+        productId: Joi.string().required().messages({
+            'string.pattern.base': 'ProductId must be string',
+            'any.required': 'ProductId is required',
+        })
+    }),
+    Joi.object({
+        date: Joi.string().pattern(datePattern).required().messages({
+        'string.pattern.base': 'Enter valid date in the format dd-mm-YYYY',
+        'any.required': 'Date is required',
+        }),
+        exerciseId: Joi.string().required().messages({
+        'string.pattern.base': 'ExerciseId must be string',
+        'any.required': 'ExerciseId is required',
+    })
+    })
+);
+
 const addDiaryProductSchema = Joi.object({
     date: Joi.string().pattern(datePattern).required().messages({
         'string.pattern.base': 'Enter valid date in the format dd-mm-YYYY',
@@ -117,6 +140,7 @@ const schemas = {
     addDiaryProductSchema,
     addDiaryExerciseSchema,
     checkDateSchema,
+    checkDateAndIdForRemovalSchema
 };
 
 const DiaryRecord = model('diaryRecord', diaryRecordSchema);

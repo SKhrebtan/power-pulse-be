@@ -36,4 +36,20 @@ router.post(
     ctrl.addDiaryProduct
 );
 
+router.patch(
+    '/:date/remove-product/:productId',
+    authenticate,
+    isValidId,
+    validateParams(schemas.checkDateAndIdForRemovalSchema),
+    ctrl.removeDiaryProduct
+);
+
+router.patch(
+    '/:date/remove-exercise/:exerciseId',
+    authenticate,
+    isValidId,
+    validateParams(schemas.checkDateAndIdForRemovalSchema),
+    ctrl.removeDiaryExercise
+);
+
 module.exports = router;
