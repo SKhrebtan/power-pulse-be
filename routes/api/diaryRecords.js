@@ -49,7 +49,7 @@ router.patch(
     '/:date/remove-exercise/:exerciseId',
     authenticate,
     isValidId,
-    validateParams(schemas.checkDateSchema),
+    validateParams(schemas.checkDateAndIdForRemovalSchema),
     validateBody(schemas.removeDiaryExerciseSchema),
     ctrl.removeDiaryExercise
 );

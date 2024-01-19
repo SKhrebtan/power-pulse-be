@@ -202,15 +202,18 @@ const removeDiaryProduct = async (req, res) => {
 
 const removeDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
-    const { date } = req.params;
-    const { exercise, time, calories } = req.body;
+    const { date, exerciseId: exercise } = req.params;
+    const { time, calories } = req.body;
 
     const result = await Exercise.findById(exercise);
     if (!result)
         throw HttpError(404, `Exercise by ID: "${exercise}" not found`);
 
     const currentRecord = await DiaryRecord.findOneAndUpdate(
-        { user, date },
+        {
+            user,
+            date,
+            "exercises.exercise":exercise},
         {
             $inc: {
                 caloriesBurned: -calories,
@@ -228,7 +231,7 @@ const removeDiaryExercise = async (req, res) => {
         .populate('exercises.exercise', 'name bodyPart equipment target');
 
     if (!currentRecord) {
-        throw HttpError(404, 'No records for this date');
+        throw HttpError(404, `Exercise with id ${exercise} has no records for this date`);
     }
 
     res.json(currentRecord);

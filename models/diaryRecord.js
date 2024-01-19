@@ -98,7 +98,8 @@ const checkDateAndIdForRemovalSchema = Joi.alternatives().try(
         date: Joi.string().pattern(datePattern).required().messages({
         'string.pattern.base': 'Enter valid date in the format dd-mm-YYYY',
         'any.required': 'Date is required',
-    }),exerciseId: Joi.string().required().messages({
+        }),
+        exerciseId: Joi.string().required().messages({
         'string.pattern.base': 'ExerciseId must be string',
         'any.required': 'ExerciseId is required',
     })
