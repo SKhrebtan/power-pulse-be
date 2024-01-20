@@ -28,7 +28,7 @@ const register = async (req, res) => {
     const verifyEmail = {
         to: email,
         subject: 'Verify email',
-        html: `<p>Please confirm your <i>Email</i></p><a href="https://saltyua.github.io/power-pulse-fs/signin?v=${verificationToken}" target="_blank">Click verify email</a> <a href="https://power-4vwy.onrender.com/api/v1/v/${verificationToken}" target="_blank">Click verify email</a>`,
+        html: `<p>Please confirm your <i>Email</i></p><a href="https://saltyua.github.io/power-pulse-fs/signin?v=${verificationToken}" target="_blank">Click verify email</a> <a href="https://power-4vwy.onrender.com/api/v1/users/v/${verificationToken}" target="_blank">Click verify email</a>`,
     };
 
     await sendEmail(verifyEmail);
