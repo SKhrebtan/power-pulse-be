@@ -28,7 +28,7 @@ const register = async (req, res) => {
     const verifyEmail = {
         to: email,
         subject: 'Verify email',
-        html: `<p>Please confirm your <i>Email</i></p><a href="https://saltyua.github.io/power-pulse-fs/signin?v=${verificationToken}" target="_blank">Click verify email</a> <a href="https://power-4vwy.onrender.com/api/v1/users/v/${verificationToken}" target="_blank">Click verify email</a>`,
+        html: `<p>Please confirm your <i>Email</i></p><a href="https://saltyua.github.io/power-pulse-fs/signin?v=${verificationToken}" target="_blank">Click verify email</a>`,
     };
 
     await sendEmail(verifyEmail);
@@ -118,7 +118,6 @@ const update = async (req, res) => {
 const updateAvatar = async (req, res) => {
     const { _id } = req.user;
     const avatarURL = req.file.path;
-    console.log(req.file);
 
     await User.findByIdAndUpdate(
         _id,
@@ -128,25 +127,6 @@ const updateAvatar = async (req, res) => {
         }
     );
     res.json({ avatarURL: avatarURL });
-};
-
-const verifyEmail = async (req, res) => {
-    const { verificationToken } = req.params;
-    const user = await User.findOne({ verificationToken });
-
-    if (!user) throw HttpError(404, 'User not found!');
-
-    if (user.verify)
-        throw HttpError(400, 'Verification has already been passed');
-
-    await User.findByIdAndUpdate(user._id, {
-        verify: true,
-        verificationToken: null,
-    });
-
-    res.json({
-        message: 'Verification successful!',
-    });
 };
 
 const verify = async (req, res) => {
@@ -198,5 +178,4 @@ module.exports = {
     updateAvatar: ctrlWrapper(updateAvatar),
     verify: ctrlWrapper(verify),
     verifyResend: ctrlWrapper(verifyResend),
-    verifyEmail: ctrlWrapper(verifyEmail),
 };

@@ -36,7 +36,7 @@ router.post(
     ctrl.addDiaryProduct
 );
 
-router.patch(
+router.post(
     '/:date/remove-product/:productId',
     authenticate,
     isValidId,
@@ -44,7 +44,7 @@ router.patch(
     ctrl.removeDiaryProduct
 );
 
-router.patch(
+router.post(
     '/:date/remove-exercise/:exerciseId',
     authenticate,
     isValidId,

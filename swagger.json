@@ -922,6 +922,136 @@
                     }
                 }
             }
+        },
+        "/diary-records/{date}/remove-product/{productId}": {
+            "post": {
+                "tags": ["Diary"],
+                "summary": "Remove product from diary",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "date",
+                        "required": true,
+                        "type": "string",
+                        "description": "Date's diary page (format dd-mm-yyyy)"
+                    },
+                    {
+                        "in": "path",
+                        "name": "productId",
+                        "required": true,
+                        "type": "string",
+                        "description": "Product's ID"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DiaryResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid ID)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found product by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundByIdResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/diary-records/{date}/remove-exercise/{exerciseId}": {
+            "post": {
+                "tags": ["Diary"],
+                "summary": "Remove exercise from diary",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "date",
+                        "required": true,
+                        "type": "string",
+                        "description": "Date's diary page (format dd-mm-yyyy)"
+                    },
+                    {
+                        "in": "path",
+                        "name": "exerciseId",
+                        "required": true,
+                        "type": "string",
+                        "description": "Exercise's ID"
+                    }
+                ],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DiaryResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid Bearer token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid ID)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvalidIdResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found exercise by ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundByIdResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {

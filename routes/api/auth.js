@@ -33,6 +33,5 @@ router.post(
     validateBody(verifyEmailSchema),
     authCtrl.verifyResend
 );
-router.get('/v/:verificationToken', authCtrl.verifyEmail);
 
 module.exports = router;
