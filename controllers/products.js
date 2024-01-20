@@ -21,6 +21,7 @@ const getAllProducts = async (req, res) => {
             title: { $regex: q, $options: 'i' },
             [groupBlood]: rec,
         });
+        
         const pages = Math.ceil(result.length / limit);
         const products = await Product.find(
             {
@@ -33,7 +34,7 @@ const getAllProducts = async (req, res) => {
                 skip,
                 limit,
             }
-        );
+        ).sort({ title: 1 });
 
         if (!result.length)
             throw HttpError(
@@ -61,7 +62,7 @@ const getAllProducts = async (req, res) => {
                 skip,
                 limit,
             }
-        );
+        ).sort({ title: 1 });
 
         if (!result.length)
             throw HttpError(
@@ -89,7 +90,7 @@ const getAllProducts = async (req, res) => {
                 skip,
                 limit,
             }
-        );
+        ).sort({ title: 1 });
 
         if (!result.length)
             throw HttpError(
@@ -117,7 +118,7 @@ const getAllProducts = async (req, res) => {
                 skip,
                 limit,
             }
-        );
+        ).sort({ title: 1 });
 
         if (!result.length)
             throw HttpError(
@@ -135,7 +136,7 @@ const getAllProducts = async (req, res) => {
         const products = await Product.find({ category: cat }, '', {
             skip,
             limit,
-        });
+        }).sort({ title: 1 });
         res.json({ data: { pages, limit, products } });
         return;
     }
@@ -152,7 +153,7 @@ const getAllProducts = async (req, res) => {
                 skip,
                 limit,
             }
-        );
+        ).sort({ title: 1 });
         if (!result.length)
             throw HttpError(
                 404,
@@ -169,7 +170,7 @@ const getAllProducts = async (req, res) => {
         const products = await Product.find({ [groupBlood]: rec }, '', {
             skip,
             limit,
-        });
+        }).sort({ title: 1 });
 
         if (!result.length)
             throw HttpError(
@@ -183,7 +184,9 @@ const getAllProducts = async (req, res) => {
 
     const result = await Product.find();
     const pages = Math.ceil(result.length / limit);
-    const products = await Product.find({}, '', { skip, limit });
+    const products = await Product.find({}, '', { skip, limit }).sort({
+        title: 1,
+    });
 
     res.json({ data: { pages, limit, products } });
 };

@@ -6,27 +6,27 @@ const getAllExercises = async (req, res) => {
     const { bodyPart = null, equipment = null, target = null } = req.query;
 
     if (bodyPart) {
-        const result = await Exercise.find({ bodyPart });
+        const result = await Exercise.find({ bodyPart }).sort({ name: 1 });
         if (!result.length) throw HttpError(400, 'Please change filter');
         res.json(result);
         return;
     }
 
     if (equipment) {
-        const result = await Exercise.find({ equipment });
+        const result = await Exercise.find({ equipment }).sort({ name: 1 });
         if (!result.length) throw HttpError(400, 'Please change filter');
         res.json(result);
         return;
     }
 
     if (target) {
-        const result = await Exercise.find({ target });
+        const result = await Exercise.find({ target }).sort({ name: 1 });
         if (!result.length) throw HttpError(400, 'Please change filter');
         res.json(result);
         return;
     }
 
-    const result = await Exercise.find();
+    const result = await Exercise.find().sort({ name: 1 });
     res.json(result);
 };
 
@@ -41,7 +41,7 @@ const getExerciseById = async (req, res) => {
 const getAllFilters = async (req, res) => {
     const { filter = 'Body parts' } = req.query;
 
-    const result = await Filter.find({ filter });
+    const result = await Filter.find({ filter }).sort({ name: 1 });
     if (!result.length)
         throw HttpError(400, 'Please change filter: "Equipment" or "Muscles"');
 
