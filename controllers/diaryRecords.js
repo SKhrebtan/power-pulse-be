@@ -4,7 +4,6 @@ const { HttpError, ctrlWrapper } = require('../helpers');
 const { Exercise } = require('../models/exercise');
 const { Product } = require('../models/product');
 
-// get specific record, by date for authorized user
 const getCurrentDiaryRecord = async (req, res) => {
     const { _id: user } = req.user;
     const { date } = req.params;
@@ -20,7 +19,6 @@ const getCurrentDiaryRecord = async (req, res) => {
     res.json(currentRecord);
 };
 
-// added product to the diary
 const addDiaryProduct = async (req, res) => {
     const { _id: user } = req.user;
     const { productId: product } = req.params;
@@ -33,8 +31,8 @@ const addDiaryProduct = async (req, res) => {
     const filter = {
         user,
         date,
-        "products.product":product
-    }
+        'products.product': product,
+    };
 
     // check if currentProduct exist in diary
     const currentProductCount = await DiaryRecord.countDocuments(filter);
@@ -42,55 +40,52 @@ const addDiaryProduct = async (req, res) => {
     // if doesn't exist in diary create new product, else update current record
     if (!currentProductCount) {
         const currentRecord = await DiaryRecord.findOneAndUpdate(
-        {
-            user,
-            date,
-        },
-        {
-            $push: {
-                products: {
-                    product,
-                    amount,
-                    calories,
+            {
+                user,
+                date,
+            },
+            {
+                $push: {
+                    products: {
+                        product,
+                        amount,
+                        calories,
+                    },
+                },
+                $inc: {
+                    caloriesConsumed: +calories,
                 },
             },
-            $inc: {
-                caloriesConsumed: +calories,
-            },
-        },
-        {
-            upsert:true,
-            new: true
-        }
-    )
-        .populate('products.product', 'title category groupBloodNotAllowed')
-        .populate('exercises.exercise', 'name bodyPart equipment target');
-        
-        res.json(currentRecord);
+            {
+                upsert: true,
+                new: true,
+            }
+        )
+            .populate('products.product', 'title category groupBloodNotAllowed')
+            .populate('exercises.exercise', 'name bodyPart equipment target');
 
+        res.json(currentRecord);
     } else {
         const currentRecord = await DiaryRecord.findOneAndUpdate(
-        filter,
-        {
-            $inc: {
-                caloriesConsumed: +calories,
-                "products.$[element].amount": +amount,
-                "products.$[element].calories": +calories,
+            filter,
+            {
+                $inc: {
+                    caloriesConsumed: +calories,
+                    'products.$[element].amount': +amount,
+                    'products.$[element].calories': +calories,
+                },
             },
-        },
-        {
-           arrayFilters:[{"element.product":product}],
-            new: true
-        }
-    )
-        .populate('products.product', 'title category groupBloodNotAllowed')
-        .populate('exercises.exercise', 'name bodyPart equipment target');
-        
-        res.json(currentRecord);
-    };
-};
+            {
+                arrayFilters: [{ 'element.product': product }],
+                new: true,
+            }
+        )
+            .populate('products.product', 'title category groupBloodNotAllowed')
+            .populate('exercises.exercise', 'name bodyPart equipment target');
 
-// add exercise to diary
+        res.json(currentRecord);
+    }
+};
 
 const addDiaryExercise = async (req, res) => {
     const { _id: user } = req.user;
@@ -104,8 +99,8 @@ const addDiaryExercise = async (req, res) => {
     const filter = {
         user,
         date,
-        "exercises.exercise":exercise
-    }
+        'exercises.exercise': exercise,
+    };
 
     // check if currentExercise exist in diary
     const currentExerciseCount = await DiaryRecord.countDocuments(filter);
@@ -113,55 +108,53 @@ const addDiaryExercise = async (req, res) => {
     // if doesn't exist in diary create new exercise, else update current record
     if (!currentExerciseCount) {
         const currentRecord = await DiaryRecord.findOneAndUpdate(
-        {
-            user,
-            date,
-        },
-        {
-            $push: {
-                exercises: {
-                    exercise,
-                    time,
-                    calories,
+            {
+                user,
+                date,
+            },
+            {
+                $push: {
+                    exercises: {
+                        exercise,
+                        time,
+                        calories,
+                    },
+                },
+                $inc: {
+                    caloriesBurned: +calories,
+                    activity: +time,
                 },
             },
-            $inc: {
-                caloriesBurned: +calories,
-                activity: +time,
-            },
-        },
             {
                 upsert: true,
-                new: true
+                new: true,
             }
-    )
-        .populate('products.product', 'title category groupBloodNotAllowed')
-        .populate('exercises.exercise', 'name bodyPart equipment target');
-        
-        res.json(currentRecord);
+        )
+            .populate('products.product', 'title category groupBloodNotAllowed')
+            .populate('exercises.exercise', 'name bodyPart equipment target');
 
+        res.json(currentRecord);
     } else {
         const currentRecord = await DiaryRecord.findOneAndUpdate(
-        filter,
-        {
-            $inc: {
-                caloriesBurned: +calories,
-                activity: +time,
-                "exercises.$[element].time": +time,
-                "exercises.$[element].calories": +calories,
+            filter,
+            {
+                $inc: {
+                    caloriesBurned: +calories,
+                    activity: +time,
+                    'exercises.$[element].time': +time,
+                    'exercises.$[element].calories': +calories,
+                },
             },
-        },
-        {
-           arrayFilters:[{"element.exercise":exercise}],
-            new: true
-        }
-    )
-        .populate('products.product', 'title category groupBloodNotAllowed')
-        .populate('exercises.exercise', 'name bodyPart equipment target');
-        
+            {
+                arrayFilters: [{ 'element.exercise': exercise }],
+                new: true,
+            }
+        )
+            .populate('products.product', 'title category groupBloodNotAllowed')
+            .populate('exercises.exercise', 'name bodyPart equipment target');
+
         res.json(currentRecord);
-    };
-    
+    }
 };
 
 const removeDiaryProduct = async (req, res) => {
@@ -169,20 +162,20 @@ const removeDiaryProduct = async (req, res) => {
     const { date, productId: product } = req.params;
 
     const result = await Product.findById(product);
-    if (!result)
-        throw HttpError(404, `Product by ID: "${product}" not found`);
+    if (!result) throw HttpError(404, `Product by ID: "${product}" not found`);
 
-    let currentRecord = await DiaryRecord.findOne(
-        {
-            date,
-            user,
-            "products.product": product,
-        }
-    );
+    let currentRecord = await DiaryRecord.findOne({
+        date,
+        user,
+        'products.product': product,
+    });
 
     if (!currentRecord) {
-        throw HttpError(404, `Product with id ${product} has no records for this date`);
-    };
+        throw HttpError(
+            404,
+            `Product with id ${product} has no records for this date`
+        );
+    }
 
     const { calories } = currentRecord.products.find(record => {
         return record.product.toString() === product;
@@ -192,7 +185,7 @@ const removeDiaryProduct = async (req, res) => {
         {
             user,
             date,
-            "products.product":product,
+            'products.product': product,
         },
         {
             $inc: {
@@ -205,7 +198,7 @@ const removeDiaryProduct = async (req, res) => {
             },
         },
         {
-            new: true
+            new: true,
         }
     )
         .populate('products.product', 'title category groupBloodNotAllowed')
@@ -222,31 +215,29 @@ const removeDiaryExercise = async (req, res) => {
     if (!result)
         throw HttpError(404, `Exercise by ID: "${exercise}" not found`);
 
-    let currentRecord = await DiaryRecord.findOne(
-        {
-            user,
-            date,
-            "exercises.exercise": exercise
-        }
-    );
+    let currentRecord = await DiaryRecord.findOne({
+        user,
+        date,
+        'exercises.exercise': exercise,
+    });
 
     if (!currentRecord) {
-        throw HttpError(404, `Exercise with id ${exercise} has no records for this date`);
+        throw HttpError(
+            404,
+            `Exercise with id ${exercise} has no records for this date`
+        );
     }
-
-
 
     const { time, calories } = currentRecord.exercises.find(record => {
         return record.exercise.toString() === exercise;
     });
 
-
-
     currentRecord = await DiaryRecord.findOneAndUpdate(
         {
             user,
             date,
-            "exercises.exercise":exercise},
+            'exercises.exercise': exercise,
+        },
         {
             $inc: {
                 caloriesBurned: -calories,
@@ -264,8 +255,6 @@ const removeDiaryExercise = async (req, res) => {
         .populate('exercises.exercise', 'name bodyPart equipment target');
 
     res.json(currentRecord);
-
-
 };
 
 module.exports = {
