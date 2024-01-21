@@ -28,17 +28,14 @@ const userSchema = new Schema(
         },
         height: {
             type: Number,
-
             default: null,
         },
         currentWeight: {
             type: Number,
-
             default: null,
         },
         desiredWeight: {
             type: Number,
-
             default: null,
         },
         birthday: {
@@ -47,17 +44,17 @@ const userSchema = new Schema(
         },
         blood: {
             type: Number,
-
+            enum: [1, 2, 3, 4],
             default: null,
         },
         sex: {
             type: String,
-
+            enum: ['male', 'female'],
             default: null,
         },
         levelActivity: {
             type: Number,
-
+            enum: [1, 2, 3, 4, 5],
             default: null,
         },
         dailySportTime: {
