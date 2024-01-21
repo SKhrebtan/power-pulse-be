@@ -2,6 +2,7 @@ const { Schema, model } = require('mongoose');
 const Joi = require('joi');
 
 const handleMongooseError = require('../helpers/handleMongooseError');
+const { HttpError } = require('../helpers');
 
 const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -126,12 +127,13 @@ const updateSchema = Joi.object({
         .max('now')
         .required()
         .custom(value => {
-            const now = new Date();
-            const age = now.getFullYear() - new Date(value).getFullYear();
-            if (age < 18) {
-                throw new Error('User must be at least 18 years old.');
+            const currentDate = new Date();
+            const eighteenYearsAgo = currentDate.getFullYear() - 18;
+            if (value.getFullYear() <= eighteenYearsAgo) {
+                return value;
+            } else {
+                throw HttpError(400, 'The person must be 18 years or older');
             }
-            return value;
         }),
     blood: Joi.number().required().valid(1, 2, 3, 4),
     sex: Joi.string().required().valid('male', 'female'),

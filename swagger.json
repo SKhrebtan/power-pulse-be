@@ -1,7 +1,7 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "version": "1.1.0",
+        "version": "1.2.1",
         "title": "Power Pulse API Documentation",
         "description": "REST API documentation for project 'Power Pulse'",
         "license": {
@@ -1012,7 +1012,7 @@
             }
         },
         "/diary-records/{date}/remove-product/{productId}": {
-            "post": {
+            "delete": {
                 "tags": ["Diary"],
                 "summary": "Remove product from diary",
                 "parameters": [
@@ -1077,7 +1077,7 @@
             }
         },
         "/diary-records/{date}/remove-exercise/{exerciseId}": {
-            "post": {
+            "delete": {
                 "tags": ["Diary"],
                 "summary": "Remove exercise from diary",
                 "parameters": [

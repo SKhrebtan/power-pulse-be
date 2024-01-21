@@ -3,7 +3,7 @@ const { Category } = require('../models/category');
 const { ctrlWrapper, HttpError } = require('../helpers');
 
 const getAllProducts = async (req, res) => {
-    const { blood: bloodType } = req.user;
+    const { blood: bloodType = 1 } = req.user;
 
     const {
         page = 1,
