@@ -86,12 +86,34 @@ userSchema.post('save', handleMongooseError);
 
 const registerSchema = Joi.object({
     name: Joi.string().required(),
-    email: Joi.string().email().pattern(emailPattern).required(),
+    email: Joi.string()
+        .email()
+        .pattern(emailPattern)
+        .required()
+        .empty(false)
+        .messages({
+            'string.base': 'The email must be a string.',
+            'any.required': 'The email field is required.',
+            'string.empty': 'The email must not be empty.',
+            'string.pattern.base':
+                'The email must be in format test@gmail.com.',
+        }),
     password: Joi.string().min(6).required(),
 });
 
 const loginSchema = Joi.object({
-    email: Joi.string().email().pattern(emailPattern).required(),
+    email: Joi.string()
+        .email()
+        .pattern(emailPattern)
+        .required()
+        .empty(false)
+        .messages({
+            'string.base': 'The email must be a string.',
+            'any.required': 'The email field is required.',
+            'string.empty': 'The email must not be empty.',
+            'string.pattern.base':
+                'The email must be in format test@gmail.com.',
+        }),
     password: Joi.string().min(6).required(),
 });
 
@@ -117,7 +139,18 @@ const updateSchema = Joi.object({
 });
 
 const verifyEmailSchema = Joi.object({
-    email: Joi.string().email().pattern(emailPattern).required(),
+    email: Joi.string()
+        .email()
+        .pattern(emailPattern)
+        .required()
+        .empty(false)
+        .messages({
+            'string.base': 'The email must be a string.',
+            'any.required': 'The email field is required.',
+            'string.empty': 'The email must not be empty.',
+            'string.pattern.base':
+                'The email must be in format test@gmail.com.',
+        }),
 });
 
 const verifyTokenSchema = Joi.object({
