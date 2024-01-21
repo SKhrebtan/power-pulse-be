@@ -294,7 +294,7 @@
                 }
             }
         },
-        "/users": {
+        "/users/current/update": {
             "patch": {
                 "tags": ["Auth"],
                 "summary": "User update",
@@ -432,7 +432,30 @@
                     {
                         "in": "query",
                         "name": "cat",
-                        "type": "string",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "alcoholic drinks",
+                                "berries",
+                                "cereals",
+                                "dairy",
+                                "dried fruits",
+                                "eggs",
+                                "fish",
+                                "flour",
+                                "fruits",
+                                "meat",
+                                "mushrooms",
+                                "nuts",
+                                "oils and fats",
+                                "poppy",
+                                "sausage",
+                                "seeds",
+                                "sesame",
+                                "soft drinks",
+                                "vegetables and herbs"
+                            ]
+                        },
                         "description": "Product's categories"
                     },
                     {
@@ -440,13 +463,6 @@
                         "name": "rec",
                         "type": "boolean",
                         "description": "Depending on the blood type is recommended or not"
-                    },
-                    {
-                        "in": "query",
-                        "name": "bloodType",
-                        "required": true,
-                        "type": "integer",
-                        "description": "Blood type (1|2|3|4)"
                     }
                 ],
                 "security": [{ "Bearer": [] }],
@@ -570,20 +586,89 @@
                     {
                         "in": "query",
                         "name": "bodyPart",
-                        "type": "string",
-                        "description": "Filter's 'Body part'"
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "back",
+                                "cardio",
+                                "chest",
+                                "lower arms",
+                                "lower legs",
+                                "neck",
+                                "shoulders",
+                                "upper arms",
+                                "upper legs",
+                                "waist"
+                            ]
+                        },
+                        "description": "Select body part for search exercises by body part"
                     },
                     {
                         "in": "query",
                         "name": "equipment",
-                        "type": "string",
-                        "description": "Filter's 'Equipment'"
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "assisted",
+                                "band",
+                                "barbell",
+                                "body weight",
+                                "bosu ball",
+                                "cable",
+                                "dumbbell",
+                                "elliptical machine",
+                                "ez barbell",
+                                "hammer",
+                                "kettlebell",
+                                "leverage machine",
+                                "medicine ball",
+                                "olympic barbell",
+                                "resistance band",
+                                "roller",
+                                "rope",
+                                "skierg machine",
+                                "sled machine",
+                                "smith machine",
+                                "stability ball",
+                                "stationary bike",
+                                "stepmill machine",
+                                "tire",
+                                "trap bar",
+                                "upper body ergometer",
+                                "weighted",
+                                "wheel roller"
+                            ]
+                        },
+                        "description": "Select equipment for search exercises by equipment"
                     },
                     {
                         "in": "query",
                         "name": "target",
-                        "type": "string",
-                        "description": "Filter's 'Target'"
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "abductors",
+                                "abs",
+                                "adductors",
+                                "biceps",
+                                "calves",
+                                "cardiovascular system",
+                                "delts",
+                                "forearms",
+                                "glutes",
+                                "hamstrings",
+                                "lats",
+                                "levator scapulae",
+                                "pectorals",
+                                "quads",
+                                "serratus anterior",
+                                "spine",
+                                "traps",
+                                "triceps",
+                                "upper back"
+                            ]
+                        },
+                        "description": "Select target for search exercises by target muscles"
                     }
                 ],
                 "security": [{ "Bearer": [] }],
@@ -688,7 +773,10 @@
                         "in": "query",
                         "name": "filter",
                         "required": true,
-                        "type": "string",
+                        "schema": {
+                            "type": "string",
+                            "enum": ["Body parts", "Muscles", "Equipment"]
+                        },
                         "description": "Exercises's filter (one of 'Body parts'|'Muscles'|'Equipment')"
                     }
                 ],

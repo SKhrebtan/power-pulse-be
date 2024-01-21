@@ -3,190 +3,35 @@ const { Category } = require('../models/category');
 const { ctrlWrapper, HttpError } = require('../helpers');
 
 const getAllProducts = async (req, res) => {
+    const { blood: bloodType } = req.user;
+
     const {
         page = 1,
         limit = 50,
-        cat = null,
-        q = null,
-        bloodType = null,
+        cat: category = null,
+        q: title = null,
         rec = null,
     } = req.query;
 
     const groupBlood = `groupBloodNotAllowed.${bloodType}`;
+
     const skip = (page - 1) * limit;
 
-    if (cat && q && rec) {
-        const result = await Product.find({
-            category: cat,
-            title: { $regex: q, $options: 'i' },
-            [groupBlood]: rec,
-        });
-        
-        const pages = Math.ceil(result.length / limit);
-        const products = await Product.find(
-            {
-                category: cat,
-                title: { $regex: q, $options: 'i' },
-                [groupBlood]: rec,
-            },
-            '',
-            {
-                skip,
-                limit,
-            }
-        ).sort({ title: 1 });
+    const query = {};
+    category && (query.category = category);
+    rec && (query[groupBlood] = rec);
+    title && (query.title = { $regex: title, $options: 'i' });
 
-        if (!result.length)
-            throw HttpError(
-                404,
-                'Product not found, please change query params'
-            );
+    const result = await Product.find(query);
 
-        res.json({ data: { pages, limit, products } });
-        return;
-    }
-
-    if (cat && q) {
-        const result = await Product.find({
-            category: cat,
-            title: { $regex: q, $options: 'i' },
-        });
-        const pages = Math.ceil(result.length / limit);
-        const products = await Product.find(
-            {
-                category: cat,
-                title: { $regex: q, $options: 'i' },
-            },
-            '',
-            {
-                skip,
-                limit,
-            }
-        ).sort({ title: 1 });
-
-        if (!result.length)
-            throw HttpError(
-                404,
-                'Product not found, please change query params'
-            );
-
-        res.json({ data: { pages, limit, products } });
-        return;
-    }
-
-    if (cat && rec) {
-        const result = await Product.find({
-            category: cat,
-            [groupBlood]: rec,
-        });
-        const pages = Math.ceil(result.length / limit);
-        const products = await Product.find(
-            {
-                category: cat,
-                [groupBlood]: rec,
-            },
-            '',
-            {
-                skip,
-                limit,
-            }
-        ).sort({ title: 1 });
-
-        if (!result.length)
-            throw HttpError(
-                404,
-                'Product not found, please change query params'
-            );
-
-        res.json({ data: { pages, limit, products } });
-        return;
-    }
-
-    if (q && rec) {
-        const result = await Product.find({
-            title: { $regex: q, $options: 'i' },
-            [groupBlood]: rec,
-        });
-        const pages = Math.ceil(result.length / limit);
-        const products = await Product.find(
-            {
-                title: { $regex: q, $options: 'i' },
-                [groupBlood]: rec,
-            },
-            '',
-            {
-                skip,
-                limit,
-            }
-        ).sort({ title: 1 });
-
-        if (!result.length)
-            throw HttpError(
-                404,
-                'Product not found, please change query params'
-            );
-
-        res.json({ data: { pages, limit, products } });
-        return;
-    }
-
-    if (cat) {
-        const result = await Product.find({ category: cat });
-        const pages = Math.ceil(result.length / limit);
-        const products = await Product.find({ category: cat }, '', {
-            skip,
-            limit,
-        }).sort({ title: 1 });
-        res.json({ data: { pages, limit, products } });
-        return;
-    }
-
-    if (q) {
-        const result = await Product.find({
-            title: { $regex: q, $options: 'i' },
-        });
-        const pages = Math.ceil(result.length / limit);
-        const products = await Product.find(
-            { title: { $regex: q, $options: 'i' } },
-            '',
-            {
-                skip,
-                limit,
-            }
-        ).sort({ title: 1 });
-        if (!result.length)
-            throw HttpError(
-                404,
-                `${q} product not found, please change the keyword search query`
-            );
-
-        res.json({ data: { pages, limit, products } });
-        return;
-    }
-
-    if (rec) {
-        const result = await Product.find({ [groupBlood]: rec });
-        const pages = Math.ceil(result.length / limit);
-        const products = await Product.find({ [groupBlood]: rec }, '', {
-            skip,
-            limit,
-        }).sort({ title: 1 });
-
-        if (!result.length)
-            throw HttpError(
-                404,
-                'Product not found, please change query params'
-            );
-
-        res.json({ data: { pages, limit, products } });
-        return;
-    }
-
-    const result = await Product.find();
     const pages = Math.ceil(result.length / limit);
-    const products = await Product.find({}, '', { skip, limit }).sort({
-        title: 1,
-    });
+    const products = await Product.find(query, '', {
+        skip,
+        limit,
+    }).sort({ title: 1 });
+
+    if (!result.length)
+        throw HttpError(404, 'Product not found, please change query params');
 
     res.json({ data: { pages, limit, products } });
 };
