@@ -5,28 +5,20 @@ const { HttpError, ctrlWrapper } = require('../helpers');
 const getAllExercises = async (req, res) => {
     const { bodyPart = null, equipment = null, target = null } = req.query;
 
-    if (bodyPart) {
-        const result = await Exercise.find({ bodyPart }).sort({ name: 1 });
-        if (!result.length) throw HttpError(400, 'Please change filter');
-        res.json(result);
-        return;
-    }
+    let result = [];
 
-    if (equipment) {
-        const result = await Exercise.find({ equipment }).sort({ name: 1 });
-        if (!result.length) throw HttpError(400, 'Please change filter');
-        res.json(result);
-        return;
-    }
+    if (bodyPart) result = await Exercise.find({ bodyPart }).sort({ name: 1 });
 
-    if (target) {
-        const result = await Exercise.find({ target }).sort({ name: 1 });
-        if (!result.length) throw HttpError(400, 'Please change filter');
-        res.json(result);
-        return;
-    }
+    if (equipment)
+        result = await Exercise.find({ equipment }).sort({ name: 1 });
 
-    const result = await Exercise.find().sort({ name: 1 });
+    if (target) result = await Exercise.find({ target }).sort({ name: 1 });
+
+    if (!bodyPart && !equipment && !target)
+        result = await Exercise.find().sort({ name: 1 });
+
+    if (!result.length) throw HttpError(400, 'Please change filter');
+
     res.json(result);
 };
 
