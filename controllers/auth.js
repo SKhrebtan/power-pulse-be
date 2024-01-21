@@ -89,7 +89,9 @@ const update = async (req, res) => {
 
     const { ...updatedUserData } = req.body;
 
-    const user = await User.findByIdAndUpdate(_id, updatedUserData);
+    const user = await User.findByIdAndUpdate(_id, updatedUserData, {
+        new: true,
+    });
 
     if (!user) {
         throw new HttpError(404, `User by ID: "${_id}" not found`);

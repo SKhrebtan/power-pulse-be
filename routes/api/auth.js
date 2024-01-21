@@ -20,7 +20,12 @@ router.post('/register', validateBody(registerSchema), authCtrl.register);
 router.post('/login', validateBody(loginSchema), authCtrl.login);
 router.get('/current', authenticate, authCtrl.current);
 router.post('/logout', authenticate, authCtrl.logout);
-router.patch('/', authenticate, validateBody(updateSchema), authCtrl.update);
+router.patch(
+    '/current/update',
+    authenticate,
+    validateBody(updateSchema),
+    authCtrl.update
+);
 router.put(
     '/upload',
     authenticate,
