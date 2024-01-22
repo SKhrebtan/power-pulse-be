@@ -7,10 +7,9 @@ const { Product } = require('../models/product');
 const getCurrentDiaryRecord = async (req, res) => {
     const { _id: user } = req.user;
     const { date } = req.params;
-    const currentRecord = await DiaryRecord.findOne({ user, date }).populate(
-        'products.product',
-        'title category'
-    );
+    const currentRecord = await DiaryRecord.findOne({ user, date })
+        .populate('products.product', 'title category groupBloodNotAllowed')
+        .populate('exercises.exercise', 'name bodyPart equipment target');
 
     if (!currentRecord) {
         throw HttpError(404, 'No records for this date');
