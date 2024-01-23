@@ -2,34 +2,34 @@
 
 ![Web-site main page](./assets/img1.png)
 
-Backend для додатку про спорт та харчування.
+Backend for the Sports and Nutrition Application.
 
-Даний репозиторій містить бекенд-частину додатку, яка допомагає авторизованому
-користувачу контролювати своє харчування та активність.
+This repository contains the backend part of the application that helps an
+authorized user control their nutrition and activity.
 
-## Структура проекту
+## Project Structure
 
--   `/controllers`: Папка з файлами-контролерами, які відповідають за обробку
-    запитів від клієнта.
--   `/helpers`: Папка з допоміжними функціями, які використовуються в інших
-    частинах проекту.
--   `/middlewares`: Папка з файлами з middleware, які використовуються для
-    обробки запитів до сервера на шляху до того, як вони досягнуть основного
-    обробника запиту.
--   `/routes/api`: Папка з файлами, які містять реалізацію маршрутів API. Тут
-    визначаються URL-шляхи та відповідні обробники, які відповідають на запити.
--   `app.js`: Файл, в якому налаштовується та створюється екземпляр
-    Express-додатку. Тут імпортуються необхідні модулі, налаштовуються
-    middleware та підключаються роутери.
--   `server.js`: Файл налаштування самого сервера. Відбувається підключення до
-    бази даних та налаштування Express-сервера.
+-   `/controllers`: Folder with controller files responsible for handling client
+    requests.
+-   `/helpers`: Folder with auxiliary functions used in other parts of the
+    project.
+-   `/middlewares`: Folder with middleware files used to process requests to the
+    server on the way to the main request handler.
+-   `/routes/api`: Folder with files containing the implementation of API
+    routes. Here, URL paths and corresponding handlers responding to requests
+    are defined.
+-   `app.js`: File where an Express application is configured and created.
+    Necessary modules are imported, middleware is configured, and routers are
+    connected.
+-   `server.js`: File for configuring the server itself. It involves connecting
+    to the database and setting up the Express server.
 
-## Вимоги та Залежності
+## Requirements and Dependencies
 
--   [Node.js](https://nodejs.org/en/) версії v18.16.0.
--   npm для управління пакетами.
+-   [Node.js](https://nodejs.org/en/) version v20.10.0.
+-   npm for package management.
 
-## Технології
+## Technologies
 
 -   <p >
       <img width="100" alt='node.js' src="./assets/img6.png">
@@ -47,26 +47,27 @@ Backend для додатку про спорт та харчування.
       <img width="100" alt='nodemailer' src="./assets/img5.png">
     </p>
 
-## Інструкції з запуску
+## Running Instructions
 
--   Встановіть залежності: `npm install`.
--   Налаштуйте змінні середовища у файлі `.env`, з прикладу `.env.example`.
--   Запустіть сервер: `npm run start`.
+-   Install dependencies: `npm install`.
+-   Configure environment variables in the `.env` file using the example in
+    `.env.example`.
+-   Start the server: `npm run start`.
 
-## Команда
+## Team
 
 -   **Team-lead**
     -   [OlehKhv](https://github.com/OlehKhv)
--   **Розробник авторизації користувача:**
+-   **User Authentication Developer:**
     -   [alyonapolova](https://github.com/alyonapolova)
--   **Розробник щоденника користувача:**
+-   **User Dairy Developer:**
     -   [nicksolony](https://github.com/nicksolony)
 
-## Корисні посилання
+## Useful Links
 
--   [Документація API проєкту](https://power-4vwy.onrender.com/api/v1/api-docs/):
-    Перегляньте документацію для отримання інформації про доступні маршрути,
-    параметри та приклади викликів.
--   [GitHub Репозиторій - Frontend](https://github.com/SaltyUA/power-pulse-fs):
-    Ознайомтеся з вихідним кодом Frontend-частини проєкту, в якому ви знайдете
-    веб-інтерфейс та відповідний клієнтський код.
+-   [Project API Documentation](https://power-4vwy.onrender.com/api/v1/api-docs/):
+    Explore the documentation for information on available routes, parameters,
+    and example calls.
+-   [GitHub Repository - Frontend](https://github.com/SaltyUA/power-pulse-fs):
+    Check out the source code of the Frontend part of the project, where you'll
+    find the web interface and corresponding client-side code.
