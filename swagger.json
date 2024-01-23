@@ -2132,6 +2132,12 @@
                     "products": [
                         {
                             "product": {
+                                "groupBloodNotAllowed": {
+                                    "1": true,
+                                    "2": true,
+                                    "3": false,
+                                    "4": false
+                                },
                                 "_id": "5d51694902b2373622ff5773",
                                 "category": "dairy",
                                 "title": "Danbo cheese"
@@ -2142,6 +2148,12 @@
                         },
                         {
                             "product": {
+                                "groupBloodNotAllowed": {
+                                    "1": true,
+                                    "2": true,
+                                    "3": false,
+                                    "4": false
+                                },
                                 "_id": "5d51694902b2373622ff5777",
                                 "category": "dairy",
                                 "title": "Homemade Cheese"
