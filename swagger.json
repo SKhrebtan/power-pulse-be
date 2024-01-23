@@ -1965,9 +1965,34 @@
                             "type": "object",
                             "properties": {
                                 "exercise": {
-                                    "type": "string",
-                                    "description": "Exercise's ID",
-                                    "example": "65a82c2d579ae912a1ac78cc"
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "Exercise's ID",
+                                            "example": "64f2458d6f67bc34bae4f7f7"
+                                        },
+                                        "bodyPart": {
+                                            "type": "string",
+                                            "description": "Body part",
+                                            "example": "chest"
+                                        },
+                                        "equipment": {
+                                            "type": "string",
+                                            "description": "Equipment",
+                                            "example": "leverage machine"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Exercise's name",
+                                            "example": "assisted chest dip (kneeling)"
+                                        },
+                                        "target": {
+                                            "type": "string",
+                                            "description": "Muscles's target ",
+                                            "example": "pectorals"
+                                        }
+                                    }
                                 },
                                 "time": {
                                     "type": "integer",
@@ -2010,6 +2035,31 @@
                                 "product": {
                                     "type": "object",
                                     "properties": {
+                                        "groupBloodNotAllowed": {
+                                            "type": "object",
+                                            "properties": {
+                                                "1": {
+                                                    "type": "boolean",
+                                                    "description": "Recommended or not",
+                                                    "example": true
+                                                },
+                                                "2": {
+                                                    "type": "boolean",
+                                                    "description": "Recommended or not",
+                                                    "example": true
+                                                },
+                                                "3": {
+                                                    "type": "boolean",
+                                                    "description": "Recommended or not",
+                                                    "example": false
+                                                },
+                                                "4": {
+                                                    "type": "boolean",
+                                                    "description": "Recommended or not",
+                                                    "example": false
+                                                }
+                                            }
+                                        },
                                         "_id": {
                                             "type": "string",
                                             "description": "Product's ID",
@@ -2052,16 +2102,28 @@
                     "user": "65a5c3bc6b69c2f872091ad0",
                     "exercises": [
                         {
-                            "exercise": "64f2458d6f67bc34bae4f7f7",
+                            "exercise": {
+                                "_id": "64f2458d6f67bc34bae4f7f7",
+                                "bodyPart": "chest",
+                                "equipment": "leverage machine",
+                                "name": "assisted chest dip (kneeling)",
+                                "target": "pectorals"
+                            },
                             "time": 5,
                             "calories": 200,
                             "_id": "65a82c2d579ae912a1ac78cc"
                         },
                         {
-                            "exercise": "64f2458d6f67bc34bae4f801",
-                            "time": 5,
-                            "calories": 200,
-                            "_id": "65a82cab3a18b00ccbf476bd"
+                            "exercise": {
+                                "_id": "64f2458d6f67bc34bae4f836",
+                                "bodyPart": "upper legs",
+                                "equipment": "barbell",
+                                "name": "barbell rack pull",
+                                "target": "glutes"
+                            },
+                            "time": 14,
+                            "calories": 700,
+                            "_id": "65b031957662b1ee8e143844"
                         }
                     ],
                     "caloriesConsumed": 1360,
