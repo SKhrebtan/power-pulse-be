@@ -54,20 +54,11 @@ authorized user control their nutrition and activity.
     `.env.example`.
 -   Start the server: `npm run start`.
 
-## Team
-
--   **Team-lead**
-    -   [OlehKhv](https://github.com/OlehKhv)
--   **User Authentication Developer:**
-    -   [alyonapolova](https://github.com/alyonapolova)
--   **User Dairy Developer:**
-    -   [nicksolony](https://github.com/nicksolony)
-
 ## Useful Links
 
 -   [Project API Documentation](https://power-4vwy.onrender.com/api/v1/api-docs/):
     Explore the documentation for information on available routes, parameters,
     and example calls.
--   [GitHub Repository - Frontend](https://github.com/SaltyUA/power-pulse-fs):
+-   [GitHub Repository - Frontend](https://github.com/SKhrebtan/power-pulse-fe):
     Check out the source code of the Frontend part of the project, where you'll
     find the web interface and corresponding client-side code.
